@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>m3u Düzenleyici</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+        }
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        textarea {
+            width: 100%;
+            height: 60px;
+            margin-bottom: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 10px;
+            resize: none;
+        }
+        button, input[type="file"] {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        #uploadButton {
+            background-color: #007bff;
+            color: white;
+        }
+        #uploadButton:hover {
+            background-color: #0056b3;
+        }
+        #saveButton {
+            background-color: #28a745;
+            color: white;
+        }
+        #saveButton:hover {
+            background-color: #218838;
+        }
+        .content-area {
+            display: flex;
+            margin-top: 20px;
+            justify-content: space-between;
+            height: 400px;
+        }
+        .left-panel, .right-panel {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            margin: 5px;
+            overflow-y: auto;
+        }
+        .category, .content-item {
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            cursor: pointer;
+            word-wrap: break-word;
+        }
+        .category.active, .content-item.active {
+            background-color: #d4edda;
+        }
+        .category-name, .content-item-title {
+            flex: 1;
+            margin-right: 10px;
+            overflow-wrap: break-word;
+        }
+        .category-toggle, .content-toggle {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .category-toggle.on, .content-toggle.on {
+            background-color: #28a745;
+        }
+        .category-toggle.off, .content-toggle.off {
+            background-color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <textarea id="m3uInput" placeholder="m3u bağlantısını buraya yapıştırın"></textarea>
+        <button id="uploadButton">Yükle</button>
+        <input type="file" id="m3uFile" accept=".m3u">
+        <img src="https://www.beceriksizler.net/images/OzBeceriksizlerNetV2/logo.png" alt="Logo" class="logo">
+        <div id="contentArea" class="content-area">
+            <div class="left-panel" id="categoryPanel"></div>
+            <div class="right-panel" id="contentPanel"></div>
+        </div>
+        <button id="saveButton">Kaydet</button>
+    </div>
+
+    <script>
+        let allCategories = {};
+
+        document.getElementById('uploadButton').addEventListener('click', function() {
+            const m3uInput = document.getElementById('m3uInput').value.trim();
+            if (!m3uInput) {
+                alert("Lütfen bir m3u bağlantısı yapıştırın.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('m3uInput', m3uInput);
+
+            fetch(window.location.href, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("m3u dosyası yüklenemedi: " + data.error);
+                } else {
+                    allCategories = data;
+                    displayCategories(data);
+                }
+            })
+            .catch(error => {
+                alert("m3u dosyası yüklenemedi: " + error.message);
+            });
+        });
+
+        document.getElementById('m3uFile').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                alert("Lütfen bir m3u dosyası seçin.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('m3uFile', file);
+
+            fetch(window.location.href, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("m3u dosyası yüklenemedi: " + data.error);
+                } else {
+                    allCategories = data;
+                    displayCategories(data);
+                }
+            })
+            .catch(error => {
+                alert("m3u dosyası yüklenemedi: " + error.message);
+            });
+        });
+
+        function displayCategories(categories) {
+            const categoryPanel = document.getElementById('categoryPanel');
+            categoryPanel.innerHTML = '';
+
+            Object.keys(categories).forEach(category => {
+                const div = document.createElement('div');
+                div.className = 'category';
+                div.innerHTML = `
+                    <div class="category-name">${category}</div>
+                    <div class="category-toggle on"></div>
+                `;
+                div.dataset.category = category;
+                categoryPanel.appendChild(div);
+
+                div.addEventListener('click', function() {
+                    toggleCategory(div, categories[category]);
+                });
+            });
+
+            // İlk kategoriye ait içerikleri göster
+            if (Object.keys(categories).length > 0) {
+                const firstCategory = Object.keys(categories)[0];
+                displayContents(categories[firstCategory]);
+            }
+        }
+
+        function toggleCategory(categoryElement, contents) {
+            const toggleElement = categoryElement.querySelector('.category-toggle');
+            toggleElement.classList.toggle('on');
+            toggleElement.classList.toggle('off');
+            const categoryName = categoryElement.dataset.category;
+
+            contents.forEach(content => {
+                content.active = !toggleElement.classList.contains('off');
+            });
+
+            displayContents(contents);
+        }
+
+        function displayContents(contents) {
+            const contentPanel = document.getElementById('contentPanel');
+            contentPanel.innerHTML = '';
+
+            contents.forEach(content => {
+                const div = document.createElement('div');
+                div.className = 'content-item' + (content.active ? ' active' : '');
+                div.innerHTML = `
+                    <div class="content-item-title">${content.title}</div>
+                    <div class="content-toggle ${content.active ? 'on' : 'off'}" data-url="${content.url}"></div>
+                `;
+                const toggleElement = div.querySelector('.content-toggle');
+                toggleElement.addEventListener('click', function() {
+                    toggleElement.classList.toggle('on');
+                    toggleElement.classList.toggle('off');
+                    content.active = !toggleElement.classList.contains('off');
+                    div.classList.toggle('active');
+                });
+                contentPanel.appendChild(div);
+            });
+        }
+
+        document.getElementById('saveButton').addEventListener('click', function() {
+            let m3uOutput = '#EXTM3U\n';
+
+            Object.keys(allCategories).forEach(category => {
+                const contents = allCategories[category];
+                contents.forEach(content => {
+                    if (content.active) {
+                        m3uOutput += `#EXTINF:-1 group-title="${category}",${content.title}\n${content.url}\n`;
+                    }
+                });
+            });
+
+            downloadM3U(m3uOutput);
+        });
+
+        function downloadM3U(m3uContent) {
+            const blob = new Blob([m3uContent], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'playlist.m3u';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
