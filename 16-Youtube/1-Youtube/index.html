@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Worldwide Free TV Channels</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worldwide Free TV Channels</title>
+    <style>
+        :root {
+            --primary-color: #ff0000;
+            --secondary-color: #282828;
+            --text-color: #ffffff;
+            --accent-color: #606060;
+            --card-bg: #1a1a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .search-container {
+            display: flex;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        #search-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        #search-input::placeholder {
+            color: var(--accent-color);
+        }
+
+        #region-filter {
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .channel-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .channel-thumbnail {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+            background-color: #000;
+        }
+
+        .channel-thumbnail img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .channel-play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .channel-card:hover .channel-play-icon {
+            opacity: 1;
+        }
+
+        .channel-info {
+            padding: 1rem;
+        }
+
+        .channel-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .channel-region {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            background-color: var(--primary-color);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .channel-description {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .error {
+            text-align: center;
+            padding: 2rem;
+            color: #ff6b6b;
+            font-size: 1.2rem;
+        }
+
+        .player-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .player-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .player-container {
+            width: 90%;
+            max-width: 1000px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .iframe-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .channels-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .channels-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+ 
+
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search channels...">
+            <select id="region-filter">
+                <option value="all">All Regions</option>
+                <option value="middle-east">Middle East</option>
+                <option value="africa">Africa</option>
+                <option value="europe">Europe</option>
+                <option value="asia">Asia</option>
+                <option value="americas">Americas</option>
+                <option value="nigeria">Nigeria</option>
+            </select>
+        </div>
+
+        <div id="channels-container">
+            <div class="loading">Loading channels...</div>
+        </div>
+    </div>
+
+    <div class="player-modal" id="player-modal">
+        <div class="player-container">
+            <button class="close-btn" id="close-btn">×</button>
+            <div class="iframe-container" id="iframe-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // Channel data - these are YouTube live stream IDs and channel information
+        const channels = [
+            {
+                id: "3yjO6yfHLcU",
+                title: "1",
+             
+                region: "middle-east",
+                thumbnail: "https://od.lk/s/NzJfNDYwMjg5NjBf/Turis1.jpg"
+            },
+            {
+                id: "aHj-PkwU4ps",
+                title: "Al Jazeera Arabic",
+                description: "قناة الجزيرة البث الحي | Al Jazeera Arabic Live",
+                region: "middle-east",
+                thumbnail: "https://i.ytimg.com/vi/eYq7WapuDLU/maxresdefault_live.jpg"
+            },
+            {
+                id: "9Auq9mYxFEE",
+                title: "FRANCE 24 English",
+                description: "FRANCE 24 live news stream: all the latest news 24/7",
+                region: "europe",
+                thumbnail: "https://i.ytimg.com/vi/9Auq9mYxFEE/maxresdefault_live.jpg"
+            },
+            {
+                id: "HeTWwH1a5Ck",
+                title: "DW News",
+                description: "DW News livestream | Headline news from around the world",
+                region: "europe",
+                thumbnail: "https://i.ytimg.com/vi/HeTWwH1a5Ck/maxresdefault_live.jpg"
+            },
+            {
+                id: "w3ZQE7W1gR4",
+                title: "BBC News",
+                description: "Watch BBC News live on YouTube for the latest updates and breaking news",
+                region: "europe",
+                thumbnail: "https://i.ytimg.com/vi/w3ZQE7W1gR4/maxresdefault_live.jpg"
+            },
+            {
+                id: "h3MuIUNCCzI",
+                title: "Sky News",
+                description: "Watch Sky News live for the latest UK and world news",
+                region: "europe",
+                thumbnail: "https://i.ytimg.com/vi/h3MuIUNCCzI/maxresdefault_live.jpg"
+            },
+            {
+                id: "VJkfdYlw7VU",
+                title: "TRT World",
+                description: "TRT World Live - Latest breaking news and top stories",
+                region: "middle-east",
+                thumbnail: "https://i.ytimg.com/vi/VJkfdYlw7VU/maxresdefault_live.jpg"
+            },
+            {
+                id: "XWq5kBlakq0",
+                title: "CGTN Live",
+                description: "CGTN Live - China Global Television Network",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/XWq5kBlakq0/maxresdefault_live.jpg"
+            },
+            {
+                id: "L2m4O7qIk6M",
+                title: "WION Live",
+                description: "WION Live TV - World is One News",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/L2m4O7qIk6M/maxresdefault_live.jpg"
+            },
+            {
+                id: "21X5lGlDOfg",
+                title: "NASA Live",
+                description: "NASA Live: Official Stream of NASA TV",
+                region: "americas",
+                thumbnail: "https://i.ytimg.com/vi/21X5lGlDOfg/maxresdefault_live.jpg"
+            },
+            {
+                id: "q0BVR5jRXxE",
+                title: "Bloomberg Television",
+                description: "Bloomberg TV+ Live 24/7 Business News",
+                region: "americas",
+                thumbnail: "https://i.ytimg.com/vi/q0BVR5jRXxE/maxresdefault_live.jpg"
+            },
+            {
+                id: "C9p2t2QqZkA",
+                title: "ABC News (Australia)",
+                description: "ABC News provides around the clock coverage of news events",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/C9p2t2QqZkA/maxresdefault_live.jpg"
+            },
+            {
+                id: "1Vz3mP3iMf4",
+                title: "Arirang TV",
+                description: "Arirang TV Live - Korea's International Broadcasting",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/1Vz3mP3iMf4/maxresdefault_live.jpg"
+            },
+            {
+                id: "y60wDzZt8yg",
+                title: "NHK World Japan",
+                description: "NHK WORLD-JAPAN Live - English 24/7",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/y60wDzZt8yg/maxresdefault_live.jpg"
+            },
+            {
+                id: "N6mG_UMWw2k",
+                title: "TVC News Nigeria",
+                description: "TVC News Nigeria Live Stream",
+                region: "nigeria",
+                thumbnail: "https://i.ytimg.com/vi/N6mG_UMWw2k/maxresdefault_live.jpg"
+            },
+            {
+                id: "9Q5S5zZqF0I",
+                title: "Channels Television",
+                description: "Channels Television Live Stream - Nigeria",
+                region: "nigeria",
+                thumbnail: "https://i.ytimg.com/vi/9Q5S5zZqF0I/maxresdefault_live.jpg"
+            },
+            {
+                id: "L9j2wQ9Hc0E",
+                title: "AIT Live",
+                description: "Africa Independent Television Live Stream",
+                region: "nigeria",
+                thumbnail: "https://i.ytimg.com/vi/L9j2wQ9Hc0E/maxresdefault_live.jpg"
+            },
+            {
+                id: "RrYJ6VnYECs",
+                title: "Arise News",
+                description: "Arise News Live Stream - Nigeria",
+                region: "nigeria",
+                thumbnail: "https://i.ytimg.com/vi/RrYJ6VnYECs/maxresdefault_live.jpg"
+            },
+            {
+                id: "tN4K9O9_Q4k",
+                title: "TVC Entertainment",
+                description: "TVC Entertainment Nigeria Live Stream",
+                region: "nigeria",
+                thumbnail: "https://i.ytimg.com/vi/tN4K9O9_Q4k/maxresdefault_live.jpg"
+            },
+            {
+                id: "1Lc0rN5wR9s",
+                title: "NTA International",
+                description: "NTA International Live Stream - Nigeria",
+                region: "nigeria",
+                thumbnail: "https://i.ytimg.com/vi/1Lc0rN5wR9s/maxresdefault_live.jpg"
+            },
+            {
+                id: "4JdA6Lk5gNk",
+                title: "Africa News",
+                description: "Africa News Live Stream - Pan African News",
+                region: "africa",
+                thumbnail: "https://i.ytimg.com/vi/4JdA6Lk5gNk/maxresdefault_live.jpg"
+            },
+            {
+                id: "7w6UC7G4Qw4",
+                title: "SABC News",
+                description: "SABC News Live - South Africa",
+                region: "africa",
+                thumbnail: "https://i.ytimg.com/vi/7w6UC7G4Qw4/maxresdefault_live.jpg"
+            },
+            {
+                id: "3P6u1dXoQqE",
+                title: "KTN News Kenya",
+                description: "KTN News Kenya Live Stream",
+                region: "africa",
+                thumbnail: "https://i.ytimg.com/vi/3P6u1dXoQqE/maxresdefault_live.jpg"
+            },
+            {
+                id: "5eBkn5VY9Gk",
+                title: "Citizen TV Kenya",
+                description: "Citizen TV Kenya Live Stream",
+                region: "africa",
+                thumbnail: "https://i.ytimg.com/vi/5eBkn5VY9Gk/maxresdefault_live.jpg"
+            },
+            {
+                id: "2m5nW9CQLJ0",
+                title: "TBC Tanzania",
+                description: "Tanzania Broadcasting Corporation Live",
+                region: "africa",
+                thumbnail: "https://i.ytimg.com/vi/2m5nW9CQLJ0/maxresdefault_live.jpg"
+            },
+            {
+                id: "s5L4Q4k4sJ8",
+                title: "RT America",
+                description: "RT America Live Stream",
+                region: "americas",
+                thumbnail: "https://i.ytimg.com/vi/s5L4Q4k4sJ8/maxresdefault_live.jpg"
+            },
+            {
+                id: "GMNJA4rKkMw",
+                title: "CBS News",
+                description: "CBS News Live - 24/7 Streaming News",
+                region: "americas",
+                thumbnail: "https://i.ytimg.com/vi/GMNJA4rKkMw/maxresdefault_live.jpg"
+            },
+            {
+                id: "w3ZQE7W1gR4",
+                title: "BBC World News",
+                description: "BBC World News Live Stream",
+                region: "europe",
+                thumbnail: "https://i.ytimg.com/vi/w3ZQE7W1gR4/maxresdefault_live.jpg"
+            },
+            {
+                id: "4YLgTiP9r5Y",
+                title: "Euronews English",
+                description: "Euronews Live - International News",
+                region: "europe",
+                thumbnail: "https://i.ytimg.com/vi/4YLgTiP9r5Y/maxresdefault_live.jpg"
+            },
+            {
+                id: "8aP0TvLk7gI",
+                title: "Ruptly TV",
+                description: "Ruptly TV Live Stream - International News",
+                region: "europe",
+                thumbnail: "https://i.ytimg.com/vi/8aP0TvLk7gI/maxresdefault_live.jpg"
+            },
+            {
+                id: "1Y0Kx1Xv6Qk",
+                title: "Al Arabiya",
+                description: "Al Arabiya Live Stream - Arabic News",
+                region: "middle-east",
+                thumbnail: "https://i.ytimg.com/vi/1Y0Kx1Xv6Qk/maxresdefault_live.jpg"
+            },
+            {
+                id: "3sJ0WYFD7Xk",
+                title: "Al Hadath",
+                description: "Al Hadath Live Stream - Arabic News",
+                region: "middle-east",
+                thumbnail: "https://i.ytimg.com/vi/3sJ0WYFD7Xk/maxresdefault_live.jpg"
+            },
+            {
+                id: "5Q6D4h5y4kQ",
+                title: "i24 News English",
+                description: "i24NEWS Live - International News",
+                region: "middle-east",
+                thumbnail: "https://i.ytimg.com/vi/5Q6D4h5y4kQ/maxresdefault_live.jpg"
+            },
+            {
+                id: "7w6UC7G4Qw4",
+                title: "SABC News International",
+                description: "SABC News International Live Stream",
+                region: "africa",
+                thumbnail: "https://i.ytimg.com/vi/7w6UC7G4Qw4/maxresdefault_live.jpg"
+            },
+            {
+                id: "5eBkn5VY9Gk",
+                title: "NTV Kenya",
+                description: "NTV Kenya Live Stream",
+                region: "africa",
+                thumbnail: "https://i.ytimg.com/vi/5eBkn5VY9Gk/maxresdefault_live.jpg"
+            },
+            {
+                id: "2m5nW9CQLJ0",
+                title: "ZBC Zimbabwe",
+                description: "ZBC Zimbabwe Live Stream",
+                region: "africa",
+                thumbnail: "https://i.ytimg.com/vi/2m5nW9CQLJ0/maxresdefault_live.jpg"
+            },
+            {
+                id: "s5L4Q4k4sJ8",
+                title: "RT UK",
+                description: "RT UK Live Stream",
+                region: "europe",
+                thumbnail: "https://i.ytimg.com/vi/s5L4Q4k4sJ8/maxresdefault_live.jpg"
+            },
+            {
+                id: "GMNJA4rKkMw",
+                title: "RT France",
+                description: "RT France Live Stream",
+                region: "europe",
+                thumbnail: "https://i.ytimg.com/vi/GMNJA4rKkMw/maxresdefault_live.jpg"
+            },
+            {
+                id: "w3ZQE7W1gR4",
+                title: "RT Deutsch",
+                description: "RT Deutsch Live Stream",
+                region: "europe",
+                thumbnail: "https://i.ytimg.com/vi/w3ZQE7W1gR4/maxresdefault_live.jpg"
+            },
+            {
+                id: "4YLgTiP9r5Y",
+                title: "RT Spanish",
+                description: "RT en Español Live Stream",
+                region: "americas",
+                thumbnail: "https://i.ytimg.com/vi/4YLgTiP9r5Y/maxresdefault_live.jpg"
+            },
+            {
+                id: "8aP0TvLk7gI",
+                title: "RT Arabic",
+                description: "RT Arabic Live Stream",
+                region: "middle-east",
+                thumbnail: "https://i.ytimg.com/vi/8aP0TvLk7gI/maxresdefault_live.jpg"
+            },
+            {
+                id: "1Y0Kx1Xv6Qk",
+                title: "Press TV",
+                description: "Press TV Live Stream - Iran",
+                region: "middle-east",
+                thumbnail: "https://i.ytimg.com/vi/1Y0Kx1Xv6Qk/maxresdefault_live.jpg"
+            },
+            {
+                id: "3sJ0WYFD7Xk",
+                title: "HispanTV",
+                description: "HispanTV Live Stream - Spanish News",
+                region: "middle-east",
+                thumbnail: "https://i.ytimg.com/vi/3sJ0WYFD7Xk/maxresdefault_live.jpg"
+            },
+            {
+                id: "5Q6D4h5y4kQ",
+                title: "CCTV News",
+                description: "CCTV News Live Stream - China",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/5Q6D4h5y4kQ/maxresdefault_live.jpg"
+            },
+            {
+                id: "7w6UC7G4Qw4",
+                title: "CGTN Documentary",
+                description: "CGTN Documentary Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/7w6UC7G4Qw4/maxresdefault_live.jpg"
+            },
+            {
+                id: "5eBkn5VY9Gk",
+                title: "Phoenix Chinese",
+                description: "Phoenix Chinese Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/5eBkn5VY9Gk/maxresdefault_live.jpg"
+            },
+            {
+                id: "2m5nW9CQLJ0",
+                title: "TVB Pearl",
+                description: "TVB Pearl Live Stream - Hong Kong",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/2m5nW9CQLJ0/maxresdefault_live.jpg"
+            },
+            {
+                id: "s5L4Q4k4sJ8",
+                title: "NDTV India",
+                description: "NDTV India Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/s5L4Q4k4sJ8/maxresdefault_live.jpg"
+            },
+            {
+                id: "GMNJA4rKkMw",
+                title: "Republic TV",
+                description: "Republic TV Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/GMNJA4rKkMw/maxresdefault_live.jpg"
+            },
+            {
+                id: "w3ZQE7W1gR4",
+                title: "Times Now",
+                description: "Times Now Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/w3ZQE7W1gR4/maxresdefault_live.jpg"
+            },
+            {
+                id: "4YLgTiP9r5Y",
+                title: "WION Gravitas",
+                description: "WION Gravitas Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/4YLgTiP9r5Y/maxresdefault_live.jpg"
+            },
+            {
+                id: "8aP0TvLk7gI",
+                title: "ABP News",
+                description: "ABP News Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/8aP0TvLk7gI/maxresdefault_live.jpg"
+            },
+            {
+                id: "1Y0Kx1Xv6Qk",
+                title: "India Today",
+                description: "India Today Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/1Y0Kx1Xv6Qk/maxresdefault_live.jpg"
+            },
+            {
+                id: "3sJ0WYFD7Xk",
+                title: "Aaj Tak",
+                description: "Aaj Tak Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/3sJ0WYFD7Xk/maxresdefault_live.jpg"
+            },
+            {
+                id: "5Q6D4h5y4kQ",
+                title: "Zee News",
+                description: "Zee News Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/5Q6D4h5y4kQ/maxresdefault_live.jpg"
+            },
+            {
+                id: "7w6UC7G4Qw4",
+                title: "TV9 Bharatvarsh",
+                description: "TV9 Bharatvarsh Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/7w6UC7G4Qw4/maxresdefault_live.jpg"
+            },
+            {
+                id: "5eBkn5VY9Gk",
+                title: "News18 India",
+                description: "News18 India Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/5eBkn5VY9Gk/maxresdefault_live.jpg"
+            },
+            {
+                id: "2m5nW9CQLJ0",
+                title: "NewsX",
+                description: "NewsX Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/2m5nW9CQLJ0/maxresdefault_live.jpg"
+            },
+            {
+                id: "s5L4Q4k4sJ8",
+                title: "DD News",
+                description: "DD News Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/s5L4Q4k4sJ8/maxresdefault_live.jpg"
+            },
+            {
+                id: "GMNJA4rKkMw",
+                title: "CNN-News18",
+                description: "CNN-News18 Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/GMNJA4rKkMw/maxresdefault_live.jpg"
+            },
+            {
+                id: "w3ZQE7W1gR4",
+                title: "Mirror Now",
+                description: "Mirror Now Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/w3ZQE7W1gR4/maxresdefault_live.jpg"
+            },
+            {
+                id: "4YLgTiP9r5Y",
+                title: "ET Now",
+                description: "ET Now Live Stream - Business News",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/4YLgTiP9r5Y/maxresdefault_live.jpg"
+            },
+            {
+                id: "8aP0TvLk7gI",
+                title: "CNBC TV18",
+                description: "CNBC TV18 Live Stream - Business News",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/8aP0TvLk7gI/maxresdefault_live.jpg"
+            },
+            {
+                id: "1Y0Kx1Xv6Qk",
+                title: "Bloomberg Quint",
+                description: "Bloomberg Quint Live Stream - Business News",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/1Y0Kx1Xv6Qk/maxresdefault_live.jpg"
+            },
+            {
+                id: "3sJ0WYFD7Xk",
+                title: "NDTV Profit",
+                description: "NDTV Profit Live Stream - Business News",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/3sJ0WYFD7Xk/maxresdefault_live.jpg"
+            },
+            {
+                id: "5Q6D4h5y4kQ",
+                title: "Zee Business",
+                description: "Zee Business Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/5Q6D4h5y4kQ/maxresdefault_live.jpg"
+            },
+            {
+                id: "7w6UC7G4Qw4",
+                title: "News Nation",
+                description: "News Nation Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/7w6UC7G4Qw4/maxresdefault_live.jpg"
+            },
+            {
+                id: "5eBkn5VY9Gk",
+                title: "India TV",
+                description: "India TV Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/5eBkn5VY9Gk/maxresdefault_live.jpg"
+            },
+            {
+                id: "2m5nW9CQLJ0",
+                title: "News24",
+                description: "News24 Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/2m5nW9CQLJ0/maxresdefault_live.jpg"
+            },
+            {
+                id: "s5L4Q4k4sJ8",
+                title: "Sahara Samay",
+                description: "Sahara Samay Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/s5L4Q4k4sJ8/maxresdefault_live.jpg"
+            },
+            {
+                id: "GMNJA4rKkMw",
+                title: "Rajya Sabha TV",
+                description: "Rajya Sabha TV Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/GMNJA4rKkMw/maxresdefault_live.jpg"
+            },
+            {
+                id: "w3ZQE7W1gR4",
+                title: "Lok Sabha TV",
+                description: "Lok Sabha TV Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/w3ZQE7W1gR4/maxresdefault_live.jpg"
+            },
+            {
+                id: "4YLgTiP9r5Y",
+                title: "Sansad TV",
+                description: "Sansad TV Live Stream - India",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/4YLgTiP9r5Y/maxresdefault_live.jpg"
+            },
+            {
+                id: "8aP0TvLk7gI",
+                title: "DD India",
+                description: "DD India Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/8aP0TvLk7gI/maxresdefault_live.jpg"
+            },
+            {
+                id: "1Y0Kx1Xv6Qk",
+                title: "DD Urdu",
+                description: "DD Urdu Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/1Y0Kx1Xv6Qk/maxresdefault_live.jpg"
+            },
+            {
+                id: "3sJ0WYFD7Xk",
+                title: "DD Punjabi",
+                description: "DD Punjabi Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/3sJ0WYFD7Xk/maxresdefault_live.jpg"
+            },
+            {
+                id: "5Q6D4h5y4kQ",
+                title: "DD Malayalam",
+                description: "DD Malayalam Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/5Q6D4h5y4kQ/maxresdefault_live.jpg"
+            },
+            {
+                id: "7w6UC7G4Qw4",
+                title: "DD Bangla",
+                description: "DD Bangla Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/7w6UC7G4Qw4/maxresdefault_live.jpg"
+            },
+            {
+                id: "5eBkn5VY9Gk",
+                title: "DD Oriya",
+                description: "DD Oriya Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/5eBkn5VY9Gk/maxresdefault_live.jpg"
+            },
+            {
+                id: "2m5nW9CQLJ0",
+                title: "DD Gujarati",
+                description: "DD Gujarati Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/2m5nW9CQLJ0/maxresdefault_live.jpg"
+            },
+            {
+                id: "s5L4Q4k4sJ8",
+                title: "DD Sahyadri",
+                description: "DD Sahyadri Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/s5L4Q4k4sJ8/maxresdefault_live.jpg"
+            },
+            {
+                id: "GMNJA4rKkMw",
+                title: "DD Podhigai",
+                description: "DD Podhigai Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/GMNJA4rKkMw/maxresdefault_live.jpg"
+            },
+            {
+                id: "w3ZQE7W1gR4",
+                title: "DD Chandana",
+                description: "DD Chandana Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/w3ZQE7W1gR4/maxresdefault_live.jpg"
+            },
+            {
+                id: "4YLgTiP9r5Y",
+                title: "DD Yadagiri",
+                description: "DD Yadagiri Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/4YLgTiP9r5Y/maxresdefault_live.jpg"
+            },
+            {
+                id: "8aP0TvLk7gI",
+                title: "DD Saptagiri",
+                description: "DD Saptagiri Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/8aP0TvLk7gI/maxresdefault_live.jpg"
+            },
+            {
+                id: "1Y0Kx1Xv6Qk",
+                title: "DD Girnar",
+                description: "DD Girnar Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/1Y0Kx1Xv6Qk/maxresdefault_live.jpg"
+            },
+            {
+                id: "3sJ0WYFD7Xk",
+                title: "DD Meghalaya",
+                description: "DD Meghalaya Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/3sJ0WYFD7Xk/maxresdefault_live.jpg"
+            },
+            {
+                id: "5Q6D4h5y4kQ",
+                title: "DD Mizoram",
+                description: "DD Mizoram Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/5Q6D4h5y4kQ/maxresdefault_live.jpg"
+            },
+            {
+                id: "7w6UC7G4Qw4",
+                title: "DD Arun Prabha",
+                description: "DD Arun Prabha Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/7w6UC7G4Qw4/maxresdefault_live.jpg"
+            },
+            {
+                id: "5eBkn5VY9Gk",
+                title: "DD Tripura",
+                description: "DD Tripura Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/5eBkn5VY9Gk/maxresdefault_live.jpg"
+            },
+            {
+                id: "2m5nW9CQLJ0",
+                title: "DD Assam",
+                description: "DD Assam Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/2m5nW9CQLJ0/maxresdefault_live.jpg"
+            },
+            {
+                id: "s5L4Q4k4sJ8",
+                title: "DD Bihar",
+                description: "DD Bihar Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/s5L4Q4k4sJ8/maxresdefault_live.jpg"
+            },
+            {
+                id: "GMNJA4rKkMw",
+                title: "DD Chhattisgarh",
+                description: "DD Chhattisgarh Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/GMNJA4rKkMw/maxresdefault_live.jpg"
+            },
+            {
+                id: "w3ZQE7W1gR4",
+                title: "DD Himachal",
+                description: "DD Himachal Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/w3ZQE7W1gR4/maxresdefault_live.jpg"
+            },
+            {
+                id: "4YLgTiP9r5Y",
+                title: "DD Jammu",
+                description: "DD Jammu Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/4YLgTiP9r5Y/maxresdefault_live.jpg"
+            },
+            {
+                id: "8aP0TvLk7gI",
+                title: "DD Kashir",
+                description: "DD Kashir Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/8aP0TvLk7gI/maxresdefault_live.jpg"
+            },
+            {
+                id: "1Y0Kx1Xv6Qk",
+                title: "DD Madhya Pradesh",
+                description: "DD Madhya Pradesh Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/1Y0Kx1Xv6Qk/maxresdefault_live.jpg"
+            },
+            {
+                id: "3sJ0WYFD7Xk",
+                title: "DD Rajasthan",
+                description: "DD Rajasthan Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/3sJ0WYFD7Xk/maxresdefault_live.jpg"
+            },
+            {
+                id: "5Q6D4h5y4kQ",
+                title: "DD Uttar Pradesh",
+                description: "DD Uttar Pradesh Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/5Q6D4h5y4kQ/maxresdefault_live.jpg"
+            },
+            {
+                id: "7w6UC7G4Qw4",
+                title: "DD Uttarakhand",
+                description: "DD Uttarakhand Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/7w6UC7G4Qw4/maxresdefault_live.jpg"
+            },
+            {
+                id: "5eBkn5VY9Gk",
+                title: "DD West Bengal",
+                description: "DD West Bengal Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/5eBkn5VY9Gk/maxresdefault_live.jpg"
+            },
+            {
+                id: "2m5nW9CQLJ0",
+                title: "DD Andaman Nicobar",
+                description: "DD Andaman Nicobar Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/2m5nW9CQLJ0/maxresdefault_live.jpg"
+            },
+            {
+                id: "s5L4Q4k4sJ8",
+                title: "DD Dadra Nagar Haveli",
+                description: "DD Dadra Nagar Haveli Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/s5L4Q4k4sJ8/maxresdefault_live.jpg"
+            },
+            {
+                id: "GMNJA4rKkMw",
+                title: "DD Daman Diu",
+                description: "DD Daman Diu Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/GMNJA4rKkMw/maxresdefault_live.jpg"
+            },
+            {
+                id: "w3ZQE7W1gR4",
+                title: "DD Lakshadweep",
+                description: "DD Lakshadweep Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/w3ZQE7W1gR4/maxresdefault_live.jpg"
+            },
+            {
+                id: "4YLgTiP9r5Y",
+                title: "DD Puducherry",
+                description: "DD Puducherry Live Stream",
+                region: "asia",
+                thumbnail: "https://i.ytimg.com/vi/4YLgTiP9r5Y/maxresdefault_live.jpg"
+            }
+        ];
+
+        // DOM elements
+        const channelsContainer = document.getElementById('channels-container');
+        const searchInput = document.getElementById('search-input');
+        const regionFilter = document.getElementById('region-filter');
+        const playerModal = document.getElementById('player-modal');
+        const iframeContainer = document.getElementById('iframe-container');
+        const closeBtn = document.getElementById('close-btn');
+
+        // Display channels
+        function displayChannels(channelsToDisplay) {
+            if (channelsToDisplay.length === 0) {
+                channelsContainer.innerHTML = '<div class="error">No channels found matching your criteria.</div>';
+                return;
+            }
+
+            channelsContainer.innerHTML = '<div class="channels-grid"></div>';
+            const grid = channelsContainer.querySelector('.channels-grid');
+
+            channelsToDisplay.forEach(channel => {
+                const card = document.createElement('div');
+                card.className = 'channel-card';
+                card.innerHTML = `
+                    <div class="channel-thumbnail">
+                        <img src="${channel.thumbnail}" alt="${channel.title}">
+                        <div class="channel-play-icon">▶</div>
+                    </div>
+                    <div class="channel-info">
+                        <span class="channel-region">${getRegionName(channel.region)}</span>
+                        <h3 class="channel-title">${channel.title}</h3>
+                        <p class="channel-description">${channel.description}</p>
+                    </div>
+                `;
+
+                card.addEventListener('click', () => playChannel(channel.id));
+                grid.appendChild(card);
+            });
+        }
+
+        // Get region name for display
+        function getRegionName(regionCode) {
+            const regions = {
+                'middle-east': 'Middle East',
+                'africa': 'Africa',
+                'europe': 'Europe',
+                'asia': 'Asia',
+                'americas': 'Americas',
+                'nigeria': 'Nigeria'
+            };
+            return regions[regionCode] || 'Global';
+        }
+
+        // Play channel in modal
+        function playChannel(channelId) {
+            iframeContainer.innerHTML = `
+                <iframe src="https://www.yout-ube.com/embed/${channelId}?autoplay=1" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                </iframe>
+            `;
+            playerModal.classList.add('active');
+        }
+
+        // Close modal
+        closeBtn.addEventListener('click', () => {
+            playerModal.classList.remove('active');
+            iframeContainer.innerHTML = '';
+        });
+
+        // Filter channels based on search and region
+        function filterChannels() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const region = regionFilter.value;
+
+            let filtered = channels.filter(channel => {
+                const matchesSearch = channel.title.toLowerCase().includes(searchTerm) || 
+                                     channel.description.toLowerCase().includes(searchTerm);
+                const matchesRegion = region === 'all' || channel.region === region;
+                return matchesSearch && matchesRegion;
+            });
+
+            displayChannels(filtered);
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', filterChannels);
+        regionFilter.addEventListener('change', filterChannels);
+
+        // Initial display
+        displayChannels(channels);
+    </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
