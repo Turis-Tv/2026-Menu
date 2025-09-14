@@ -23,7 +23,7 @@ loginForm.addEventListener('submit', function(event) {
     const password = document.getElementById('password').value;
     
     // Simülasyon: Kullanıcı adı ve şifre kontrolü
-    if (username === 'Turis' && password === '6636') {
+    if (username === 'Turis' && password === '2430') {
         showMessage('success', 'Başarılı giriş! Yönlendiriliyorsunuz...');
         setTimeout(() => {
             // Başarılı giriş durumunda burada yönlendirme veya başka işlemler yapılabilir

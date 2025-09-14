@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Plyr youtube mp4  playlist</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plyr Player with Video Playlist</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.12/plyr.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #player-container {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        #playlist {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        #playlist li {
+            margin: 5px 0;
+        }
+        #playlist a {
+            text-decoration: none;
+            color: #0073aa;
+            font-weight: bold;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            background: #fff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #playlist a:hover {
+            background-color: #0073aa;
+            color: #fff;
+        }
+        #playlist a.active {
+            background-color: #0073aa;
+            color: #fff;
+        }
+        .plyr__controls {
+            background-color: #0073aa; /* Цвет панели управления */
+        }
+        .plyr__controls .plyr__control--overlaid {
+            background-color: #0073aa; /* Цвет кнопок управления */
+        }
+        .plyr__control--play-large {
+            background-color: #0073aa; /* Цвет кнопки воспроизведения */
+        }
+    </style>
+</head>
+<body>
+    <div id="player-container">
+        <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="QotvaeKserQ"></div>
+    </div>
+
+    <ul id="playlist">
+        <!-- YouTube Video -->
+        
+
+        <!-- MP4 Video -->
+        <li><a href="#" data-src="https://v1.paradisehill.cc/video/a7ce7eabea3be_3C8wK8BUsM_part1.mp4" data-provider="html5">Part 1</a></li>
+        <li><a href="#" data-src="https://v1.paradisehill.cc/video/a7ce7eabea3be_3C8wK8BUsM_part2.mp4" data-provider="html5">Part 2</a></li>
+        <li><a href="#" data-src="https://v1.paradisehill.cc/video/a7ce7eabea3be_3C8wK8BUsM_part3.mp4" data-provider="html5">Part 3</a></li>
+ 
+
+    </ul>
+
+    <script src="https://cdn.plyr.io/3.6.12/plyr.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const player = new Plyr('#player', {
+                captions: { active: true, language: 'en' },
+                controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen']
+            });
+
+            const playlistLinks = document.querySelectorAll('#playlist a');
+            playlistLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const src = link.getAttribute('data-src');
+                    const provider = link.getAttribute('data-provider');
+
+                    // Обновление источника плеера в зависимости от типа контента
+                    player.source = {
+                        type: 'video',
+                        sources: [
+                            {
+                                src: src,
+                                provider: provider
+                            }
+                        ]
+                    };
+
+                    // Установка активной ссылки для стиля
+                    playlistLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+
+                    // Воспроизведение после переключения
+                    player.play();
+                });
+            });
+
+            // Установка активной ссылки при загрузке страницы
+            document.querySelector('#playlist a').classList.add('active');
+
+            // Установка источника для первого элемента в плейлисте при загрузке
+            const initialLink = document.querySelector('#playlist a');
+            if (initialLink) {
+                player.source = {
+                    type: 'video',
+                    sources: [
+                        {
+                            src: initialLink.getAttribute('data-src'),
+                            provider: initialLink.getAttribute('data-provider')
+                        }
+                    ]
+                };
+            }
+        });
+    </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>

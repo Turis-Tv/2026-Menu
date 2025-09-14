@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Turis Tv</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Interface met 9 knoppen en afbeeldingen</title>
+  <style>
+    body {
+      background-color: #000000;
+      margin: 0;
+      padding: 20px;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 100px;
+      margin-bottom: 100px;
+    }
+    
+    
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      -flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 65px;
+      gap: 20px;
+    }
+    
+    .button-wrapper {
+  max-height: calc(100vh - 200px); /* Pas aan als dat nodig is */
+  overflow-y: hedden;
+}
+
+
+    .button {
+      -width: 400px;
+      height: 70px;
+      background-color: transparent;
+      border: none;
+      border-bottom: 2px solid white;
+      border-radius: 50px;
+      transition: box-shadow 0.3s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      color: white;
+      font-size: 16px;
+    }
+
+    .button:hover {
+      box-shadow: 0 0 5px 5px white;
+      background-color: #333;
+    }
+
+    .button img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .button span {
+      flex: 1;
+      text-align: left;
+    }
+      
+
+    .filter-menu {
+      display: flex;
+      overflow-x: auto; /* Horizontaal scrollen toestaan */
+      scrollbar-width: none; /* Verberg de schuifbalk in browsers die deze weergeven */
+      -ms-overflow-style: none; /* De schuifbalk verbergen in Internet Explorer */
+      -justify-content: center;
+      align-items: center;
+      position: fixed;
+      top: 20px;
+      left: 0;
+      right: 0;
+      top: 0;
+      z-index: 9999;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+     - border-radius: 20px;
+    }
+
+    .filter-menu button:hover{ background-color: #333;}
+
+    .filter-menu button {
+      background-color: transparent;
+      color: white;
+      border: none;
+      margin: 2 5px;
+      cursor: pointer;
+      font-size: 15px;
+      border-radius: 20px;
+      padding: 5px 10px;
+    }
+
+    .filter-menu button.active {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .footer-menu {
+      display: flex;
+      justify-content: center;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 20px;
+      transition: bottom 0.3s;
+    }
+
+    .footer-menu.hidden {
+      bottom: -60px;
+    }
+
+    .search-icon {
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .search-icon img {
+      width: 30px;
+      height: 30px;
+    }
+
+    .search-box {
+      position: fixed;
+      top: 55px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      display: none;
+    }
+
+    .search-box input[type="text"] {
+      padding: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background-color: #333;
+      color: white;
+      font-size: 14px;
+      width: 145px;
+      box-shadow: none;
+    }
+
+    .search-icon:hover+.search-box {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+ 
+ <div class="menu-container">
+ <div class="filter-menu">&nbsp&nbsp&nbsp&nbsp&nbsp
+     <label for="search" class="search-icon">
+        <img src="https://cdn-icons-png.flaticon.com/128/3721/3721591.png" alt="Lupa">
+      </label>
+      <div class="search-box" id="search-box">
+        <input type="text" id="search" placeholder="Aramak" oninput="searchByName(this.value)">
+      </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    <button class="filter-button active" onclick="filterSelection('all')"> </button>
+    <button class="filter-button" onclick="filterSelection('1')"> </button>
+    <button class="filter-button" onclick="filterSelection('2')"> </button>
+    <button class="filter-button" onclick="filterSelection('3')"> </button>
+    <button class="filter-button" onclick="filterSelection('4')"> </button>
+    <button class="filter-button" onclick="filterSelection('5')"> </button>
+    <button class="filter-button" onclick="filterSelection('6')"> </button>
+    <button class="filter-button" onclick="filterSelection('7')"> </button>
+    <button class="filter-button" onclick="filterSelection('8')"> </button>
+
+    
+    
+  </div>
+   </div>
+  <div class="button-wrapper" id="button-container">
+  <!-- Aquí van tus botones -->
+    <div class="button-container" id="button-container">
+
+
+
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-0')">
+        <img src="https://en.paradisehill.cc/images/5110ac3b91cc7/preview-front-684266b70f6fd.webp" alt="Imagen">
+        <span>Young & Beautiful 0</span>
+      </button>
+
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-1/index.html')">
+        <img src="https://en.paradisehill.cc/images/5110ac3b91cc7/preview-front-684266b70f6fd.webp" alt="Imagen">
+        <span>Young & Beautiful 1</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-2/index.html')">
+        <img src="https://en.paradisehill.cc/images/2f0a734971f78/preview-front-684267411ccfb.webp" alt="Imagen">
+        <span>Young & Beautiful 2</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-3/index.html')">
+        <img src="https://en.paradisehill.cc/images/30f5faa242b72/preview-front-684267641954b.webp" alt="Imagen">
+        <span>Young & Beautiful 3</span>
+      </button>
+
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-4/index.html')">
+        <img src="https://en.paradisehill.cc/images/aa4c28abd24db/preview-front-6841ddfa4d29b.webp" alt="Imagen">
+        <span>Young & Beautiful 4</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-5/index.html')">
+        <img src="https://en.paradisehill.cc/images/2593f5bce81dc/preview-front-684198ef4b5a7.webp" alt="Imagen">
+        <span>Young & Beautiful 5</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-6/index.html')">
+        <img src="https://en.paradisehill.cc/images/2eee3c31b71c8/preview-front-684145370b044.webp" alt="Imagen">
+        <span>Young & Beautiful 6</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-7/index.html')">
+        <img src="https://en.paradisehill.cc/images/0288f7544a363/preview-front-6840b1292ae45.webp" alt="Imagen">
+        <span>Young & Beautiful 7</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-8/index.html')">
+        <img src="https://en.paradisehill.cc/images/79efcae3c5d3c/preview-front-6840911fbb78b.webp" alt="Imagen">
+        <span>Young & Beautiful 8</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-9/index.html')">
+        <img src="https://en.paradisehill.cc/images/0d92730e44da1/preview-front-68408ee5a461e.webp" alt="Imagen">
+        <span>Young & Beautiful 9</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-10/index.html')">
+        <img src="https://en.paradisehill.cc/images/a7ce7eabea3be/preview-front-68406982c7c80.webp" alt="Imagen">
+        <span>Young & Beautiful 10</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-11/index.html')">
+        <img src="https://en.paradisehill.cc/images/3f6338260e884/preview-front-68404f718560c.webp" alt="Imagen">
+        <span>Young & Beautiful 11</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-12/index.html')">
+        <img src="https://en.paradisehill.cc/images/866cdb1309767/preview-front-683fcb4504b91.webp" alt="Imagen">
+        <span>Young & Beautiful 12</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-13/index.html')">
+        <img src="https://en.paradisehill.cc/images/cf7506a2d364e/preview-front-683fca490572f.webp" alt="Imagen">
+        <span>Young & Beautiful 13</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-14/index.html')">
+        <img src="https://en.paradisehill.cc/images/0d9f305ac1b05/preview-front-683fc94c0ccbe.webp" alt="Imagen">
+        <span>Young & Beautiful 14</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-15/index.html')">
+        <img src="https://en.paradisehill.cc/images/ef21eab679b0c/preview-front-683fc89db59ce.webp" alt="Imagen">
+        <span>Young & Beautiful 15</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-16/index.html')">
+        <img src="https://en.paradisehill.cc/images/25b003c2281b3/preview-front-683fc7d897a13.webp" alt="Imagen">
+        <span>Young & Beautiful 16</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-17/index.html')">
+        <img src="https://en.paradisehill.cc/images/6703e634895f7/preview-front-683fc7438b5b3.webp" alt="Imagen">
+        <span>Young & Beautiful 17</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-18/index.html')">
+        <img src="https://en.paradisehill.cc/images/80f0bddeb95cf/preview-front-683fc6e695ef8.webp" alt="Imagen">
+        <span>Young & Beautiful 18</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-19/index.html')">
+        <img src="https://en.paradisehill.cc/images/345fb4b5085d1/preview-front-683fc6745ffcb.webp" alt="Imagen">
+        <span>Young & Beautiful 19</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-20/index.html')">
+        <img src="https://en.paradisehill.cc/images/8844fcfed2114/preview-front-683fc63994def.webp" alt="Imagen">
+        <span>Young & Beautiful 20</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-21/index.html')">
+        <img src="https://en.paradisehill.cc/images/8eb85ed75c0b8/preview-front-683fc57949ff8.webp" alt="Imagen">
+        <span>Young & Beautiful 21</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-22/index.html')">
+        <img src="https://en.paradisehill.cc/images/ff8a594e7a253/preview-front-683fc5023e0df.webp" alt="Imagen">
+        <span>Young & Beautiful 22</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-23/index.html')">
+        <img src="https://en.paradisehill.cc/images/cc34570939de1/preview-front-683fc4d7c9b71.webp" alt="Imagen">
+        <span>Young & Beautiful 23</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-24/index.html')">
+        <img src="https://en.paradisehill.cc/images/2662d219464bd/preview-front-683fc3fd5f988.webp" alt="Imagen">
+        <span>Young & Beautiful 24</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-25/index.html')">
+        <img src="https://en.paradisehill.cc/images/a01869c573817/preview-front-683fc3a5103de.webp" alt="Imagen">
+        <span>Young & Beautiful 25</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-26/index.html')">
+        <img src="https://en.paradisehill.cc/images/d9867e635d2bb/preview-front-683fc38885f8f.webp" alt="Imagen">
+        <span>Young & Beautiful 26</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-27/index.html')">
+        <img src="https://en.paradisehill.cc/images/70eb5bd2672fa/preview-front-683fc32e42761.webp" alt="Imagen">
+        <span>Young & Beautiful 27</span>
+      </button>
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-28/index.html')">
+        <img src="https://en.paradisehill.cc/images/35abfaa7f036b/preview-front-683fc2cc69282.webp" alt="Imagen">
+        <span>Young & Beautiful 28</span>
+      </button>
+
+
+        <button class="button 1" onclick="redirectTo('Young-&-Beautiful-29/index.html')">
+        <img src="https://en.paradisehill.cc/images/5022078cf7455/preview-front-683fc1ec1ef8c.webp" alt="Imagen">
+        <span>Young & Beautiful 29</span>
+      </button>
+
+
+        <button class="button 1" onclick="redirectTo('+18-Dosyalar/Young-&-Beautiful-30/index.html')">
+        <img src="https://en.paradisehill.cc/images/7ab1332e7cb76/preview-front-683fc1891c5d1.webp" alt="Imagen">
+        <span>Young & Beautiful 30</span>
+      </button>
+
+
+
+
+
+
+    </div>
+  
+</div>
+
+ 
+    
+
+  <script>
+    function redirectTo(url) {
+      window.location.href = url;
+    }
+
+    function searchByName(name) {
+      var buttons = document.getElementsByClassName('button');
+      for (var i = 0; i < buttons.length; i++) {
+        var buttonName = buttons[i].querySelector('span').innerText.toLowerCase();
+        if (buttonName.includes(name.toLowerCase())) {
+          buttons[i].style.display = 'flex';
+        } else {
+          buttons[i].style.display = 'none';
+        }
+      }
+    }
+
+    function filterSelection(category) {
+      var buttons = document.getElementsByClassName('button');
+      if (category === 'all') {
+        for (var i = 0; i < buttons.length; i++) {
+          buttons[i].style.display = 'flex';
+        }
+      } else {
+        for (var i = 0; i < buttons.length; i++) {
+          if (buttons[i].classList.contains(category)) {
+            buttons[i].style.display = 'flex';
+          } else {
+            buttons[i].style.display = 'none';
+          }
+        }
+      }
+      setActiveButton(category);
+    }
+
+    function setActiveButton(category) {
+      var buttons = document.getElementsByClassName('filter-button');
+      for (var i = 0; i < buttons.length; i++) {
+        if (buttons[i].classList.contains('active')) {
+          buttons[i].classList.remove('active');
+        }
+      }
+      var activeButton = document.querySelector('.filter-button.' + category);
+      activeButton.classList.add('active');
+    }
+
+    window.addEventListener('resize', function() {
+      var container = document.getElementById('button-container');
+      var windowHeight = window.innerHeight;
+      var titleHeight = 0;
+      container.style.maxHeight = (windowHeight - titleHeight - 40) + 'px';
+    });
+
+    window.addEventListener('load', function() {
+      var container = document.getElementById('button-container');
+      var windowHeight = window.innerHeight;
+      var titleHeight = 0;
+      container.style.maxHeight = (windowHeight - titleHeight - 40) + 'px';
+    });
+
+    var lastScrollTop = 0;
+    window.addEventListener("scroll", function() {
+      var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+      if (currentScroll > lastScrollTop) {
+        document.getElementById("footer-menu").classList.add("hidden");
+      } else {
+        document.getElementById("footer-menu").classList.remove("hidden");
+      }
+      lastScrollTop = currentScroll;
+    }, false);
+
+    document.getElementById('search-box').addEventListener('click', function(event) {
+      event.stopPropagation();
+    });
+  </script>
+</body>
+
+</html>
+<!-- partial -->
+  
+</body>
+</html>
