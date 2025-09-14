@@ -1,0 +1,85 @@
+
+Trt 1              tgn.bozztv.com/dvrfl05/gin-trt1eu/tracks-v1a1/mono.m3u8                  
+ATV              c.fulltvizle.com/aytv/tracks-v1a1/mono.m3u8                      
+ATV | b              116.202.238.88/ATV_TR/index.m3u8                      
+ATV | c              50.7.144.122:1935/livetv/atv.stream/sec-f5-v1-a1.m3u8                     
+ATV | d              yayin2.canlitv.fun/livetv/atv.stream/master.m3u8                    
+ATV | e              c.fulltvizle.com/aytv/index.m3u8                    ,
+ATV | f              c.fulltvizle.com/aytv/index.m3u8                      
+ATV | g              yayin2.canlitv.fun/livetv/atv.stream/master.m3u8                   
+ATV | h              50.7.144.122:1935/livetv/atv.stream/sec-f5-v1-a1.m3u8                     
+ATV | i              116.202.238.88/ATV_TR/index.m3u8                      
+Atv eu              tgn.bozztv.com/dvrfl05/gin-atvavrupa/tracks-v1a1/mono.m3u8                      
+Atv eu | a              trn03.tulix.tv/gt-atvavrupa/index.m3u8                        
+Kanal D | a              116.202.238.88/KANALD_TR/index.m3u8                      
+Kanal D | b              50.7.144.122:1935/livetv/kanald.stream/sec-f5-v1-a1.m3u8                      
+Kanal D | c              yayin2.canlitv.fun/livetv/kanald.stream/master.m3u8                      
+Kanal D | d              c.fulltvizle.com/kanald/index.m3u8                            
+Euro D              tgn.bozztv.com/dvrfl05/gin-eurod/tracks-v1a1/mono.m3u8                            
+Show Tv | b              116.202.238.88/SHOWTV_TR/index.m3u8                          
+Show Tv | d              yayin2.canlitv.fun/livetv/showtv.stream/master.m3u8                      
+Show Tv | e              c.fulltvizle.com/show/index.m3u8                      
+Show Tv | f              ciner-live.daioncdn.net/showtv/showtv.m3u8                      
+Show Tv | g              66.160.192.241/showtv/index.m3u8                      
+Show Türk              tgn.bozztv.com/dvrfl05/gin-showtvturk/tracks-v1a1/mono.m3u8                           
+Show Max              raw.githubusercontent.com/ipstreet312/freeiptv/master/ressources/tur/shmax.m3u8                      
+Star              trn03.tulix.tv/gt-startv/index.m3u8                      
+Star | a              116.202.238.88/STARTV_TR/index.m3u8                      
+Star | b              50.7.144.122:1935/livetv/startv.stream/sec-f5-v1-a1.m3u8                      
+Star | c              yayin2.canlitv.fun/livetv/startv.stream/master.m3u8                      
+Star | d              c.fulltvizle.com/star/index.m3u8                      
+Star | e              dogus-live.daioncdn.net/startv/startv.m3u8                      
+Star | f              tna6.tulix.tv/live/83a4128e87fca734c959aa37b03c8a4d/6737a153/ovair1-starttv.m3u8                      
+Star | g              live-fi.tvkaista.net/star-channel/live.m3u8?src=opengraph                      
+Star | h              66.160.192.241/startvturk/index.m3u8                      
+Euro Star              tgn.bozztv.com/trn03/gt-eurostar/tracks-v1a1/mono.m3u8                      
+Beyaztv              beyaztv-live.daioncdn.net/beyaztv/beyaztv.m3u8                      
+Beyaztv | a              helga.iptv2022.com/beyaz_tv/index.m3u8                      
+Beyaztv | b              yayin2.canlitv.fun/livetv/beyaztv.stream/master.m3u8                     
+Beyaztv | b              50.7.144.122:1935/livetv/beyaztv.stream/sec-f5-v1-a1.m3u8                      
+Beyaztv | c              116.202.238.88/BEYAZTV_TR/index.m3u8                      
+Beyaztv | d              tgn.bozztv.com/dvrfl05/gin-beyaztv/tracks-v1a1/mono.m3u8                   
+Beyaztv | e              trn03.tulix.tv/gt-beyaztv/index.m3u8                      
+Kanal7              trn03.tulix.tv/gt-kanal7/index.m3u8                      
+Kanal7 | a              tgn.bozztv.com/dvrfl05/gin-kanal7/tracks-v1a1/mono.m3u8                    
+Kanal7 | b              kanal7-live.daioncdn.net/kanal7/kanal7.m3u8                      
+Kanal7 | c              149.13.0.66:4003/kanal7                     
+Kanal7 | d              kanal7-live.daioncdn.net/kanal7/kanal7.m3u8                    
+Kanal7 | e              149.13.0.66:4003/kanal7                     
+Kanal7 | f              c.fulltvizle.com/kanal7/index.m3u8                    
+Kanal7 | g              tgn.bozztv.com/dvrfl05/gin-kanal7/tracks-v1a1/mono.m3u8                      
+Kanal7 | h              trn03.tulix.tv/gt-kanal7/index.m3u8                      
+Kanal 7 Eu              livetv.radyotvonline.net/kanal7live/kanal7avr/chunklist.m3u8                     
+TV 8,5              50.7.144.122:1935/livetv/tv8-5.stream/sec-f5-v1-a1.m3u8                     
+TV 8                tv8-live.daioncdn.net/tv8/tv8.m3u8                      
+TV 8 Int               tgn.bozztv.com/dvrfl05/gin-tv8int/tracks-v1a1/mono.m3u8                      
+ Trt 1                stream.tvcdn.net/ulusal/trt-1.m3u8                     
+ Trt 1                tgn.bozztv.com/dvrfl05/gin-trt1eu/tracks-v1a1/mono.m3u8                   
+ Kanal D                stream.tvcdn.net/ulusal/kanal-d.m3u8                      
+ Now TV                stream.tvcdn.net/ulusal/now-tv.m3u8                    
+ Show TV                stream.tvcdn.net/ulusal/show-tv.m3u8                      
+ Beyaz TV                stream.tvcdn.net/ulusal/beyaz-tv.m3u8                      
+ Kanal 7                stream.tvcdn.net/ulusal/tv8.m3u8                      
+ TV 8                 tgn.bozztv.com/dvrfl05/gin-trt1eu/tracks-v1a1/mono.m3u8                    
+ TV 8                 stream.tvcdn.net/ulusal/tv8.m3u8                      
+ Star TV                 stream.tvcdn.net/ulusal/star-tv.m3u8                     
+ 360 TV                stream.tvcdn.net/ulusal/360-tv.m3u8                      
+ TV 100                stream.tvcdn.net/ulusal/tv-100.m3u8                     
+ TRT Türk                stream.tvcdn.net/ulusal-yurt-disi/trt-turk.m3u8                   
+ Euro D               stream.tvcdn.net/ulusal-yurt-disi/euro-d.m3u                      
+ Euro D               stream.tvcdn.net/ulusal-yurt-disi/euro-d.m3u8                      
+ TGRT EU                stream.tvcdn.net/ulusal-yurt-disi/tgrt-eu.m3u8                      
+ Show Türk                stream.tvcdn.net/ulusal-yurt-disi/show-turk.m3u8                      
+ Beyaz TV                 stream.tvcdn.net/ulusal/beyaz-tv.m3u8                   
+ 360 TV                 stream.tvcdn.net/ulusal/360-tv.m3u8                      
+ TRT Türk                stream.tvcdn.net/ulusal-yurt-disi/trt-turk.m3u8                     
+ TRT Avaz                 stream.tvcdn.net/ulusal-yurt-disi/trt-avaz.m3u8                   
+ Show Max                 stream.tvcdn.net/eglence/show-max.m3u8                  
+
+
+
+
+
+
+
+
