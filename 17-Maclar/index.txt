@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Simple jQuery Accordian</title>
+  <link rel="stylesheet" href="https://public.codepenassets.com/css/normalize-5.0.0.min.css">
+<link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<dl class="accordion">
+
+<dt><a href="canli-mac-izle/bein-sports-1/1-Bein-1.htm ">Bein 1</a></dt>
+<dd>Bein 1</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/2-Bein-2.htm">Bein 2</a></dt>
+<dd>Bein 2</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/3-Bein-3.htm ">Bein 3</a></dt>
+<dd>Bein 3</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/4-Bein-4.htm ">Bein 4</a></dt>
+<dd> Bein 4 </dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/5-Bein-5.htm ">Bein 5</a></dt>
+<dd>Bein 5</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/6-Bein-Sport-Haber.htm ">Bein Sport Haber</a></dt>
+<dd>Bein Sport Haber</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/A2.htm "> A 2</a></dt>
+<dd>A 2</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/A-Spor.htm ">A Spor</a></dt>
+<dd>A Spor</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Atv.htm ">Atv</a></dt>
+<dd>Atv</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Bein-1.htm ">Bein 1</a></dt>
+<dd>Bein 1</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Bein-Sport-Max-1.htm ">Bein Sport Max 1</a></dt>
+<dd>Bein Sport Max 1</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Bein-Sport-Max-2.htm ">Bein Sport Max 2</a></dt>
+<dd>Bein Sport Max 2</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Cbc-Sport.htm ">Cbc Sport</a></dt>
+<dd>Cbc Sport</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/EuroSport-1.htm ">EuroSport 1</a></dt>
+<dd>EuroSport 1</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/EuroSport-2.htm ">EuroSport 2</a></dt>
+<dd>EuroSport 2</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Fb-Tv.htm ">Fb Tv</a></dt>
+<dd>Fb Tv</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/HT-Spor.htm ">HT Spor</a></dt>
+<dd>HT Spor</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Ictima-Tv.htm ">Ictima Tv</a></dt>
+<dd>Ictima Tv</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Idman-Tv.htm ">Idman-Tv</a></dt>
+<dd>Idman-Tv</dd>
+
+<dt><a href="canli-mac-izle/Nba-Tv.htm ">Nba Tv</a></dt>
+<dd>Nba Tv</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Spor-Smart-1.htm ">Spor Smart 1</a></dt>
+<dd>Spor Smart 1</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Spor-Smart-2.htm ">Spor Smart 2</a></dt>
+<dd>Spor Smart 2</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Sports-Tv.htm ">Sports Tv</a></dt>
+<dd>Sports Tv</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/S-Sport.htm ">S Sport</a></dt>
+<dd>S Sport</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/S-Sport-2.htm ">S Sport 2</a></dt>
+<dd>S Sport 2</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/tabii-spor.htm ">Tabii Spor</a></dt>
+<dd>Tabii Spor</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/tabii-spor-1.htm ">Tabii Spor 1</a></dt>
+<dd>Tabii Spor 1</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/tabii-spor-2.htm ">Tabii Spor 2</a></dt>
+<dd>Tabii Spor 2</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/tabii-spor-3.htm ">Tabii Spor 3</a></dt>
+<dd>Tabii Spor 3</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/tabii-spor-4.htm ">Tabii Spor 4</a></dt>
+<dd>Tabii Spor 4</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/tabii-spor-5.htm ">Tabii Spor 5</a></dt>
+<dd>Tabii Spor 5</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/tabii-spor-6.htm ">Tabii Spor 6</a></dt>
+<dd>Tabii Spor 6</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/tivibu-spor.htm ">Tivibu-Spor</a></dt>
+<dd>Turis Tv +18 XXX</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/tivibu-spor-1.htm ">Tivibu-Spor 1</a></dt>
+<dd>Tivibu-Spor 1</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/tivibu-spor-2.htm ">Tivibu-Spor 2</a></dt>
+<dd>Tivibu-Spor 2</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/tivibu-spor-3.htm ">Tivibu-Spor 3</a></dt>
+<dd>Tivibu-Spor 3</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/tivibu-spor-4.htm ">Tivibu-Spor 4</a></dt>
+<dd>Tivibu-Spor 4</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Trt-1.htm ">Trt 1</a></dt>
+<dd>Trt 1</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Trt-Spor.htm ">Trt Spor</a></dt>
+<dd>Trt Spor</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Trt-Spor-Yildiz.htm ">Trt Spor Yildiz</a></dt>
+<dd>Turis Tv +18 XXX</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Tv-8.htm ">Tv 8</a></dt>
+<dd>Tv 8</dd>
+
+<dt><a href="canli-mac-izle/bein-sports-1/Tv-85.htm ">Tv 8.5</a></dt>
+<dd>Tv 8.5</dd>
+
+
+
+
+
+
+</dl>
+<!-- partial -->
+  <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script><script  src="./script.js"></script>
+
+</body>
+</html>
