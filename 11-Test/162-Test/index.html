@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>M3U Player multi source</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+	<title>M3U Player multi source</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+  <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+   <link href="https://unpkg.com/videojs-max-quality-selector@0.9.1/dist/videojs-max-quality-selector.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://vsalema.github.io/newiptv/css/newiptv.css" rel="stylesheet" />  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://vsalema.github.io/tvpt4/css/tresmin.css" rel="stylesheet" />
+    <script src="https://vjs.zencdn.net/7.4.1/video.min.js"></script>
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/scss/_root.scss
+  " rel="stylesheet" />
+  <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-WND5TJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'GTM-WND5TJ');
+</script>
+  <style>
+  
+  .btn-successxx {
+background-color: #222 !important;
+  color: #fff;
+  border-color: #28a745;
+  font-size: 12px;
+
+  }
+  
+  </style>
+  <style>
+  h1 {
+  font-size: calc(0.375rem + 1.5vw);
+}
+.fa-lg {
+  font-size: 3.0em;
+  line-height: .75em;
+  vertical-align: -15%;
+}
+	  
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+.btn {
+    --inset: 0.3rem;
+    width: 10rem;
+    height: 3rem;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    border: 0;
+    border-radius: 1rem;
+    color: hsl(180, 7%, 68%);
+    text-shadow: 0px -1px 0.5px #0005;
+    background-image: linear-gradient(
+        180deg,
+        #313131,
+        30%,
+        hsl(180, 29%, 33%),
+        #252525,
+        hsl(180, 26%, 8%)
+    );
+    border: #0007 1px solid;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: pointer;
+    outline: none;
+    transition: all 133ms ease-out;
+    margin-left: 30px;
+    margin-top: -9px;
+}
+
+.btn::before {
+    z-index: -1;
+    content: "";
+    position: absolute;
+    inset: 0.3rem;
+    border-radius: calc(1rem - var(--inset));
+    box-shadow: 0 1px 0.5px -0.5px hsla(180, 69%, 83%, 0.8),
+        inset 0px 0px 0px 1px hsl(180, 13%, 10%), inset 0 0 3px 1px #102c2c;
+}
+
+.btn::after {
+    content: "";
+    position: absolute;
+    inset: 0.3rem;
+    z-index: -1;
+    border-radius: calc(1rem - var(--inset)) calc(1rem - var(--inset)) 0 0;
+    height: 75%;
+    background: linear-gradient(-15deg, #0000 50%, #fff4 51%);
+    filter: invert(50%);
+    mix-blend-mode: color-burn;
+    opacity: 0;
+}
+
+.btn:active::before {
+    box-shadow: inset 0 0 0 1px #26262d, inset 0 0px 2px 1px #0009,
+        inset 0 -1.5px 0.5px 0.5px hsla(180, 12%, 43%),
+        0 1px 0.25px -0.25px hsla(180, 69%, 83%, 0.8);
+    background-image: linear-gradient(
+        180deg,
+        hsl(180, 13%, 34%),
+        hsl(180, 8%, 50%),
+        hsl(180, 13%, 34%)
+    );
+}
+
+.btn:hover[aria-selected="false"] {
+    filter: brightness(110%);
+    box-shadow: 0 1px 5px #fff2, 0 10px 14px -4px #0008;
+}
+
+.btn:active[aria-selected="false"] {
+    scale: 0.96;
+    filter: unset;
+    box-shadow: none;
+}
+
+.btn:active[aria-selected="true"] {
+    box-shadow: none;
+    scale: 0.96;
+}
+
+.btn[aria-selected="true"] {
+    box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.2),
+        0 15px 30px rgba(0, 0, 0, 0.3);
+    filter: brightness(120%);
+}
+
+.btn[aria-selected="true"]:not(:active)::after {
+    opacity: 1;
+}
+
+</style>
+  <style>
+    .up {
+  --color: #f8f9fa;
+  --hover: #94e458;
+}
+button {
+  background: #759333;
+  border: 1px solid;
+  border-radius: 10px;
+  font: inherit;
+  line-height: inherit;
+  line-height: 1;
+  margin: 0.5em;
+  padding: 1em 2em;
+width: 180px;
+height: 10vh;
+font-size: 1.1rem;
+}
+button {
+  color: var(--color);
+  transition: 0.25s;
+}
+    
+/* imports */
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro");
+/* colors */
+/* variables */
+/* mixins */
+/* resets and base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: #000000;
+  color: white;
+  font: normal 12px/1.42857 "Source Sans Pro", Helvetica, Arial, sans-serif;
+}
+
+body {
+  background: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  font: inherit;
+  font-size: 1.2rem;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+a:hover {
+  opacity: 0.8;
+}
+
+/* nav toggle */
+.nav-toggle {
+  cursor: pointer;
+  height: 2.5rem;
+  left: 1rem;
+  position: fixed;
+  top: 1rem;
+  width: 3.5rem;
+  z-index: 2;
+}
+.nav-toggle:hover {
+  opacity: 0.8;
+}
+.nav-toggle .nav-toggle-bar,
+.nav-toggle .nav-toggle-bar::after,
+.nav-toggle .nav-toggle-bar::before {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  background: #fff0;
+  content: "";
+  height: 0.5rem;
+  transition: all 0.5s;
+  width: 100%;
+}
+.nav-toggle .nav-toggle-bar {
+  margin-top: 0;
+}
+.nav-toggle .nav-toggle-bar::after {
+  margin-top: 1rem;
+}
+.nav-toggle .nav-toggle-bar::before {
+  margin-top: -1rem;
+}
+.nav-toggle.expanded .nav-toggle-bar {
+  background: transparent;
+}
+.nav-toggle.expanded .nav-toggle-bar::after, .nav-toggle.expanded .nav-toggle-bar::before {
+  background: white;
+  margin-top: 0;
+}
+.nav-toggle.expanded .nav-toggle-bar::after {
+  -ms-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.nav-toggle.expanded .nav-toggle-bar::before {
+  -ms-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+/* nav */
+.nav {
+  box-shadow: none;
+  color: white;
+  display: flex;
+  font-size: 0.95rem;
+  height: 100vh;
+  left: -24rem;
+  padding: 6rem 3rem 3rem 3rem;
+  position: fixed;
+  top: 0;
+  transition: box-shadow 0.5s, left 0.5s;
+  width: 27rem;
+  z-index: 1;
+}
+.nav.expanded {
+  
+  left: 0;
+}
+.nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  list-style: none;
+  margin: auto 0;
+}
+
+/*   #main {
+	$-background-top: rgba(color(accent), .8);
+	$-background-bottom: rgba(color(primary), .8);
+	$-background-gradient: linear-gradient(to bottom,
+		$-background-top, $-background-bottom);
+	$-background-url: url('https://wallpapers.com/images/featured/plain-black-background-02fh7564l8qq4m6d.jpg');
+
+	background-image: $-background-gradient, $-background-url;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	color: contrast-color($-background-top,
+		color(text-dark), color(text-light));
+	flex-grow: 1;
+	flex-shrink: 0;
+	padding: 2rem;
+	position: relative;
+}
+*/
+  </style>
+  <style>
+  .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  margin-left: calc(var(--bs-border-width) * -1);
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+  
+  .vjs-modal-dialog .vjs-modal-dialog-content {
+  z-index: -1;
+}
+  
+  #channels {
+   margin-left: -39px;
+   margin-top: -74px;
+    }
+  .form-control {
+  color: #238bbe;
+ 
+    }
+  .input-group {
+    color: darkgray;
+  }
+  .ch {
+  margin-top: -17px;
+  margin-left: -3px;
+  color: #ffffff57;
+  font-size: 0.9em;
+}   
+	  .form-select {
+color: #18e4c7;
+font-size: 1.1rem;
+} 
+  
+  </style>
+  <style>
+  
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.accordion h2 {
+  background-color: #;
+  cursor: pointer;
+  margin: 0;
+  padding: 15px 0 15px 50px;
+  position: relative;
+  color: white;
+  width: 287px;
+  margin-left: -54px;
+}
+.accordion h4 {
+  background-color: #;
+  color: #a9afb5;
+  margin: 0;
+  padding: 5px 0 5px 10px;
+}
+.accordion h4:before {
+  content: ">";
+  color: #7cba21;
+  margin-right: 5px;
+}
+.accordion h4:hover {
+  color: #7cba21;
+  cursor: pointer;
+}
+ a:link {
+  text-decoration: none;
+}
+  </style>
+  <style>
+  .accord {
+  font-size: 1.1rem;
+  }
+  
+.imputa2 {
+  margin-top: 55%;
+  left: 0rem;
+  position: relative;
+  height: 200vh;
+    }
+
+
+  </style>
+  </head>
+<script>
+  var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(["setCookieDomain", "*.anym3u8player.com"]);
+  _paq.push(["setDomains", ["*.anym3u8player.com"]]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//analytics.techyhub.co/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '3']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="//analytics.techyhub.co/matomo.php?idsite=3&amp;rec=1" style="border:0;" alt="" /></p></noscript>
+  <body onclick="togglesubmenu();">
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+      <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script>
+  <div class="nav-toggle"><p class="ch">chaines</p>
+    
+    <div class="imputa2"><p class="ch" style="">
+   
+      <div class="nav-toggle-bar" style=""></div>
+      <div class="input-group2 mb-5">
+    <img id="channelLogo2" src="" alt="Logo chaîne📺" class="tmd d-block mx-auto" style="max-width:250px;max-height:100px;box-shadow:8px 8px 10px 0 rgba(0,0,0,0.5);" title="Open menu !">
+  </div>
+  </div>
+    
+    
+    
+    </p>
+	<div class="nav-toggle-bar" style=""></div>
+</div>
+<nav id="nav" class="nav">
+  <div id="channels">
+    <div class="container">
+    <h1 class="mb-3 text-center" style="margin-left:0px;color: greenyellow;">M3U Playlist</h1>
+<div class="imputa">
+    <div class="input-group2 mb-5">
+      <img id="channelLogo" src="" alt="Logo chaîne📺" class="vjs-control-bar tmd d-block mx-auto" dir="ltr" style="max-width:250px;max-height:100px;box-shadow:8px 8px 10px 0 rgba(0,0,0,0.5);">
+  </div>
+  </div>
+        <div class="input-group mb-3"> 
+      <a href="javascript:window.location.reload();" data-toggle="tooltip" title="" style="position:absolute;right:-4px;top:-5px;padding: 0 12px;" data-original-title="Refresh Page"><span id="btnRefresh" class="mb-3 fa fa-refresh fa-lg"   
+      style="top: -120px;
+  left: 15px;
+  color: blue;
+  position: relative;"></span></a></div>
+       <div id="m3u" class=""><div class=""><form id="form_m3u" class="" onsubmit="if (!window.__cfRLUnblockHandlers) return false; return checklist(this.playlist.value)" action="https://vsalema.github.io/newiptv/" method="get" data-cf-modified-6184b24e82a652a5468a33a6-=""><h2 class=""><button style="padding:0 1px;position: relative;height: 45px;margin-left: 36px;" padding:0 1px" data-toggle="tooltip" title="Playlist Loader" class="btn btn-success" id="col_elamhad" type="submit" data-loading-text="<i class='fa fa-spinner fa-spin fa-fw' aria-hidden='true'></i>Load M3U">Load another list</button></div>  
+        
+    <br>IPTV M3U LIST</br>
+    
+  
+  <div class="input-group mb-3">
+      <select id="sourceSelect" class="form-select">
+        <option value="https://raw.githubusercontent.com/vsalema/tvpt4/refs/heads/main/css/TVradioZap-TV-Europe%2B_s_2024-12-27.m3u">France TV 🇫🇷</option>
+        <option value="https://raw.githubusercontent.com/vsalema/tvpt4/refs/heads/main/js/M3UPT.m3u">Portugal praias TV 🇵🇹</option>
+	<option value="https://raw.githubusercontent.com/vsalema/tvpt4/refs/heads/main/css/PT.m3u">Portugal TV 🇵🇹</option>
+	<option value="https://raw.githubusercontent.com/vsalema/tvpt4/refs/heads/main/css/movies.m3u">Movies</option>
+        <option value="https://raw.githubusercontent.com/Paradise-91/ParaTV/refs/heads/main/playlists/samsungtvplus/group/fr/fr.m3u">samsungtvplusfrance</option>
+        <option value="https://raw.githubusercontent.com/Paradise-91/ParaTV/refs/heads/main/playlists/samsungtvplus/main/samsungtvplus.m3u">samsungtvpluseurope</option>
+        <option value="https://raw.githubusercontent.com/Paradise-91/ParaTV/refs/heads/main/playlists/paratv/group/tf1plus/tf1plus.m3u">TF1PLUS</option>
+        <option value="https://iptv-org.github.io/iptv/index.m3u">iptv Monde</option>
+        <option value="https://tvradiozap.eu/index.php/s/tvrzra.m3u">Radio</option>
+        <option value="https://iptv-org.github.io/iptv/index.country.m3u">country</option>
+        <option value="https://iptv-org.github.io/iptv/index.language.m3u">language</option>
+        <option value="custom">Load M3u</option>
+      </select>&nbsp;&nbsp;&nbsp;
+ 
+    
+      <input type="text" id="m3uLink" class="form-control w-50" placeholder="Entrez le chemin M3U">
+    </div>
+
+    
+
+    <div class=" input-group">
+      <label for="categorySelect" class="form-label text-center w-50 ">Sélectionnez la catégorie:</label>
+      <span class="form-label text-center w-50">Sélectionnez la chaîne:</span>
+    </div>
+
+    <div class="input-group mb-3">
+      <select id="categorySelect" class="form-select"></select>&nbsp;&nbsp;
+      <select id="channelSelect" class="form-select"></select>
+    </div>
+    <b>load m3u list to your pc</b>
+    <div class="input-group mb-3">
+      <input type="file" id="fileInput" class="form-control">
+    </div>
+    
+    
+  <div class="input-group mb-3">
+     
+  <form id="vsg-loadvideo">
+    Video youtube/m3u8/mpd/mp4/mav/webm/M4a/mp3 URL:
+    
+    <input class="inpt webflow-style-input" type="text" name="vidurl" id="vsg-vurl" style="background-color: #477f7f;
+  margin-left: -11px;
+  border: 1px solid #f3f8f8;
+  width: 220px;" value="" placeholder="Direct play Enter URL source">
+    <br>
+    <br>
+     <button type="submit" class="btn" aria-selected="true" style="position: relative;margin-top: 5px;margin-left: 32px;color: white;">PLAY</button>
+   
+    
+    <label for="input"></label>
+    <br>load file to your pc mp3/mp4/other source</br>
+    &nbsp;&nbsp;
+    <input type="file" class="form-control" id="input" name="input_video" style="margin-left: -8px;">
+          
+          </form>
+     
+</div>
+      
+        </div>  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <div class="input-group mb-3">
+       <form id="vsg-loadvideo">
+    Video mp4, hls, mpd Url Active:
+    
+      <input type="text" id="channelLink" class="" placeholder="Lien de chaîne" style="width:180px;">
+    </form>
+         </div>
+
+   
+  </div> 
+  </div>
+</nav> 
+      
+<video data-dashjs-player autoplay id="player"   class="js-video video-js vjs-fluid vjs-big-play-centered" controls preload="auto" poster="https://cdn.futura-sciences.com/sources/images/iptv.jpeg" data-setup="{}">
+          <-- <source src="https://fl2.moveonjoy.com/HBO/index.m3u8" type="application/x-mpegURL" /> -->
+          <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a
+            web browser that
+            <a href="https://videojs.com/html5-video-support/" target="_blank"
+              >supports HTML5 video</a
+            >
+          </p>
+        </video>
+    
+
+
+<script>
+    var video = document.getElementById("player");
+document.getElementById("input").addEventListener("change", function() {
+      var media = URL.createObjectURL(this.files[0]);
+      video.src = media;
+      video.style.display = "block";
+      video.play();
+    });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/videojs-youtube/2.6.0/Youtube.min.js'></script>
+<main id="main"></main>
+<script src="https://players.brightcove.net/videojs-quality-menu/1/videojs-quality-menu.min.js"></script>
+<script src="https://unpkg.com/videojs-max-quality-selector@0.9.1/dist/videojs-max-quality-selector.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.20.3/video.min.js"></script>
+<script src="https://vsalema.github.io/newiptv2/js/newiptv.js "></script>
+<script id="rendered-js" >
+const sidebar = document.getElementById('sidebar');
+const hamburger = document.querySelector('.hamburger');
+const sideLinks = sidebar.querySelectorAll('a');
+
+function toggleSidebar() {
+  sidebar.classList.toggle('sidebaractive');
+
+}
+
+hamburger.addEventListener('click', toggleSidebar);
+
+sideLinks.forEach(link => {
+  link.addEventListener('click', toggleSidebar);
+
+});
+function togglesubmenu() {
+  if (window.matchMedia("(max-width: 1366px)").matches) {
+    const y = document.querySelectorAll("div.hamburger");
+    y[0].classList.toggle("platevisible");
+  }
+}
+var player = videojs('player');
+player.maxQualitySelector({
+  'defaultQuality': 2 // Make the video start playing at the highest quality possible
+});
+  //# sourceURL=pen.js
+    </script>
+  
+  
+  <script>
+  
+  (function(window, videojs) {
+     var player = window.player = videojs('player');
+	  player.ready(function() {
+	  const muteButton = document.querySelector("");
+		  muteButton.click();
+			
+		  var promise = player.play();
+		  if (promise !== undefined) {
+			  promise.then(function() {
+				  const muteButton = document.querySelector("");
+				}).catch(function(error) {
+				});
+			} else {
+			}
+		  });
+player.maxQualitySelector({
+		  displayCurrentQuality: false,
+	  });
+	}(window, window.videojs));
+  
+  </script>
+  
+  <script>
+  (function () {
+
+  let hamburger = {
+    nav: document.querySelector('#nav'),
+    navToggle: document.querySelector('.nav-toggle'),
+
+    initialize() {
+      this.navToggle.addEventListener('click',
+      () => {this.toggle();});
+    },
+
+    toggle() {
+      this.navToggle.classList.toggle('expanded');
+      this.nav.classList.toggle('expanded');
+    } };
+
+
+  hamburger.initialize();
+
+})();
+  </script>
+  <script>
+ var vgsPlayer, poster;
+vgsPlayer = videojs('player');
+
+vgsPlayer.poster('');
+
+$('#vidlink li a').on('click', function(e) {
+  e.preventDefault();
+  var vidlink = $(this).attr('href');
+  $('#vsg-vurl').val(vidlink);  
+  $('input[type=submit]').click(); 
+//vsgLoadVideo(vidlink);
+});
+
+jQuery(function($) {
+$("#vsg-loadvideo").submit(function(e) {
+    e.preventDefault();
+
+    var vidURL = $("#vsg-vurl").val();
+
+    vsgLoadVideo(vidURL);
+
+  });
+
+}); 
+
+function vsgLoadVideo(vidURL, poster) {
+
+  var type = getType(vidURL);
+
+  console.log(type);
+
+  if (getId(vidURL))
+    poster = "http://img.youtube.com/vi/" + getId(vidURL) + "/hqdefault.jpg";
+
+  vgsPlayer.src({
+    "src": vidURL,
+    "type": type
+  });
+  if (poster)
+    vgsPlayer.poster(poster);
+  else
+  	vgsPlayer.poster("https://cdn.futura-sciences.com/sources/images/iptv.jpeg");
+ vgsPlayer.play();
+ return false;
+
+}
+function ytVidId(url) {
+ var p = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+
+  if (url.match(p) || getId(url).length == 11)
+    return false;
+}
+function getId(url) {
+  var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+  var match = url.match(regExp);
+
+  if (match && match[2].length == 11) {
+    return match[2];
+  } else {
+    return false;
+  }
+}
+
+var rtmp_suffix = /^rtmp:\/\//;
+var hls_suffix = /\.m3u8/;
+var mp4_suffix = /\.(mp4|m4p|m4v|mov)/i;
+var hds_suffix = /\.f4m/;
+var dash_suffix = /\.mpd/;
+var flv_suffix = /\.flv/;
+var webm_suffix = /\.webm/;
+var mpeg_suffix = /\.(mp3|m4a)/i;
+var ogg_suffix = /\.ogg/;
+var yt_suffix = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+var dm_suffix = /\.?dailymotion.com/;
+var vm_suffix = /\.?vimeo.com/;
+function getType(url) {
+  if (mpeg_suffix.test(url))
+    return 'audio/mpeg';
+  if (ogg_suffix.test(url))
+    return 'audio/ogg';
+  if (dash_suffix.test(url))
+    return 'application/dash+xml';
+  if (rtmp_suffix.test(url))
+    return 'rtmp/mp4';
+  if (hls_suffix.test(url))
+    return 'application/x-mpegurl';
+  if (mp4_suffix.test(url))
+    return 'video/mp4';
+  if (hds_suffix.test(url))
+    return 'application/adobe-f4m';
+  if (flv_suffix.test(url))
+    return 'video/flv';
+  if (webm_suffix.test(url))
+    return 'video/webm';
+  if (yt_suffix.test(url)) {
+    
+    return 'video/youtube';
+  }
+  if (dm_suffix.test(url))
+    return 'video/dailymotion';
+  if (vm_suffix.test(url))
+    return 'video/vimeo';
+
+  console.log('could not guess link type: "' + url + '" assuming mp4');
+  return 'video/mp4';
+};
+
+function getExt(ext) {
+
+  //if (ext == "youtube") ext = "mp4";
+  if (ext == "mp4" || ext == "m4v") ext = "m4v";
+  if (ext == "ogg" || ext == "ogv") ext = "oga";
+  if (ext == "webm") ext = "webmv";
+
+  return ext;
+}
+
+  const refreshBtn = document.getElementById("btnRefresh");
+
+function handleClick() {
+  history.go(0);
+}
+
+refreshBtn.addEventListener("click", handleClick);
+
+  </script>
+  <script>
+  class ButtonHandler {
+    constructor(button) {
+        this.button = button;
+        this.isButtonTypeValid = this.button.type === "button";
+        this.init();
+    }
+
+    init() {
+        if (this.isButtonTypeValid) {
+            this.button.addEventListener(
+                "click",
+                this.toggleAriaSelected.bind(this)
+            );
+        }
+    }
+
+    toggleAriaSelected() {
+        const isSelected = this.button.getAttribute("aria-selected") === "true";
+        this.button.setAttribute(
+            "aria-selected",
+            isSelected ? "false" : "true"
+        );
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const button = document.querySelector(".btn");
+    button && new ButtonHandler(button);
+});
+
+  </script>
+  
+  <script>
+  var $listChildPanels = $('.accordion > li ul');   var hideListChildPanels = $listChildPanels.hide();
+    
+$('.accordion > li > h2').click(function(e) {
+
+  hideListChildPanels.slideUp();
+
+  $('.accordion li > h2').removeClass('shown');
+  $('.accordion li').removeClass('shown');
+
+  var subList = $(this).siblings();
+
+  if(!$(subList).is(':visible')){
+    $(subList).slideDown();
+    $(this).addClass('shown');
+    $(this).closest('li').addClass('shown');
+  }
+
+  e.preventDefault();
+});
+    </script>  
+  <script src='https://cdn.statically.io/gh/videojs/videojs-youtube/fa85128b/dist/Youtube.min.js'></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://www.elahmad.com/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="6184b24e82a652a5468a33a6-|49" defer></script>
+  </body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
