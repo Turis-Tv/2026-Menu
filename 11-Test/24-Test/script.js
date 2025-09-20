@@ -1,13 +1,15 @@
 const channels = {
     news: [
-        { name: "Turis", src: "http://vps-e2e15dc8.vps.ovh.net/mp4s/promotv.m3u8", img: "link_to_logo" },
-        { name: "2M", src: "https://tlfaz.com/Tv-Channel/2m-maroc/?embed_media_shr=1", img: "link_to_logo" },
-        { name: "المغربية", src: "https://tlfaz.com/Tv-Channel/almaghribia/?embed_media_shr=1", img: "link_to_logo" },
-        { name: "ميدي 1", src: "https://tlfaz.com/Tv-Channel/medi1/?embed_media_shr=1", img: "link_to_logo" },
-        { name: "الجزيرة", src: "https://tlfaz.com/Tv-Channel/al-jazeera/?embed_media_shr=1", img: "link_to_logo" },
-        { name: "الجزيرة مباشر", src: "https://tlfaz.com/Tv-Channel/al-jazeera-mubasher/?embed_media_shr=1", img: "link_to_logo" },
-        { name: "الجزيرة الوثائقية", src: "https://tlfaz.com/Tv-Channel/al-jazeera-documentary/?embed_media_shr=1", img: "link_to_logo" },
-        { name: "الجزيرة الوثائقية", src: "https://tlfaz.com/Tv-Channel/al-jazeera-documentary/?embed_media_shr=1", img: "link_to_logo" }
+        { name: "Trt 1", src: "https://tv-trt1.medya.trt.com.tr/master.m3u8", img: "link_to_logo" },
+        { name: "Atv", src: "https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/atv/atv.m3u8", img: "link_to_logo" },
+        { name: "Kanal D", src: "https://ackaxsqacw.turknet.ercdn.net/ozfkfbbjba/kanald/kanald.m3u8", img: "link_to_logo" },
+        { name: "Star TV", src: "https://emmazbvkkf.turknet.ercdn.net/cnifuowzza/startv/startv.m3u8", img: "link_to_logo" },
+        { name: "Show TV", src: "https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/showtv/showtv.m3u8", img: "link_to_logo" },
+        { name: "Now", src: "https://uycyyuuzyh.turknet.ercdn.net/nphindgytw/nowtv/nowtv.m3u8", img: "link_to_logo" },
+        { name: "Tv 8", src: "https://rkhubpaomb.turknet.ercdn.net/fwjkgpasof/tv8/tv8.m3u8", img: "link_to_logo" },
+        { name: "Tv 8,5", src: "https://rkhubpaomb.turknet.ercdn.net/fwjkgpasof/tv8bucuk/tv8bucuk.m3u8"   }
+ 
+ 
     ],
     sports: [
         { name: "الرياضية", src: "https://tlfaz.com/Tv-Channel/arryadia/?embed_media_shr=1", img: "link_to_logo" },
