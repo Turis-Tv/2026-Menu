@@ -1,6 +1,6 @@
 // app.js
 
-const m3uUrl = "https://raw.githubusercontent.com/Turis-Tv/Turis-Tv-m3u/refs/heads/main/2-Haberler.m3u";
+const m3uUrl = "https://raw.githubusercontent.com/Turis-Tv/Turis-Tv-m3u/refs/heads/main/tv.m3u";
 let channels = [];
 let currentChannelIndex = 0;
 
