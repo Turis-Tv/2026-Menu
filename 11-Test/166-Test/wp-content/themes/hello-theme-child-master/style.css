@@ -1,0 +1,126 @@
+/* 
+Theme Name: Hello Elementor Child
+Theme URI: https://github.com/elementor/hello-theme/
+Description: Hello Elementor Child is a child theme of Hello Elementor, created by Elementor team
+Author: Elementor Team
+Author URI: https://elementor.com/
+Template: hello-elementor
+Version: 1.0.1
+Text Domain: hello-elementor-child
+License: GNU General Public License v3 or later.
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
+Tags: flexible-header, custom-colors, custom-menu, custom-logo, editor-style, featured-images, rtl-language-support, threaded-comments, translation-ready
+*/
+/* Overflow */
+body,
+html {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}
+a{color:inherit}
+a:hover{color:inherit}
+a:active{color:inherit}
+
+/* Sticky header */
+header.sticky-header {
+  --transition: 0.4s linear;
+  background-color: rgba(255, 255, 255, 0);
+  transition: background-color var(--transition),
+    backdrop-filter var(--transition), box-shadow var(--transition);
+}
+
+header.sticky-header.elementor-sticky--effects {
+  background-color: rgba(11, 11, 69, 0.85);
+  box-shadow: 0px 4px 33px 1px rgba(0, 0, 0, 0.05);
+  -webkit-backdrop-filter: saturate(150%) blur(20px);
+  backdrop-filter: saturate(150%) blur(20px);
+}
+header.sticky-header > .elementor-container {
+  min-height: var(--header-height);
+  transition: min-height var(--transition);
+}
+header.sticky-header.elementor-sticky--effects > .elementor-container {
+  min-height: calc(var(--header-height) * var(--shrink-header-to));
+}
+
+/* About Us page */
+.page-id-104 img {
+  border-radius: 5px !important;
+}
+
+
+/* Arrow down Events */
+.scroll-down-dude:before,
+.scroll-down-dude:after {
+  content: "";
+  display: block;
+  width: 24px;
+  height: 24px;
+	margin-left:auto;
+  margin-right:auto;
+	text-align: center !important;
+  transform: rotate(45deg);
+  border-bottom: 4px solid white;
+  border-right: 4px solid white;
+}
+
+.scroll-down-dude:before {
+  -webkit-animation: down-arrow-before 2.6s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+          animation: down-arrow-before 2.6s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+}
+
+.scroll-down-dude:after {
+  -webkit-animation: down-arrow-after 2.6s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+          animation: down-arrow-after 2.6s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+}
+
+@-webkit-keyframes down-arrow-before {
+  50% {
+    transform: rotate(45deg) translate(70%, 70%);
+  }
+  100% {
+    transform: rotate(45deg) translate(70%, 70%);
+  }
+}
+
+@keyframes down-arrow-before {
+  50% {
+    transform: rotate(45deg) translate(70%, 70%);
+  }
+  100% {
+    transform: rotate(45deg) translate(70%, 70%);
+  }
+}
+@-webkit-keyframes down-arrow-after {
+  50% {
+    transform: rotate(45deg) translate(110%, 110%);
+    opacity: 0;
+  }
+  51% {
+    transform: rotate(45deg) translate(-130%, -130%);
+  }
+  100% {
+    transform: rotate(45deg) translate(-70%, -70%);
+    opacity: 1;
+  }
+}
+@keyframes down-arrow-after {
+  50% {
+    transform: rotate(45deg) translate(110%, 110%);
+    opacity: 0;
+  }
+  51% {
+    transform: rotate(45deg) translate(-130%, -130%);
+  }
+  100% {
+    transform: rotate(45deg) translate(-70%, -70%);
+    opacity: 1;
+  }
+}
+
+/* Gallery items fit */
+#photo-template img {
+    height: 225px;
+    object-fit: cover;
+}
+  
