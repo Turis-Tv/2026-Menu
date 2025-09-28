@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="nl">
+<head>
+
+<body style="background-color:#050505;">
+</body>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+ 
+  <style>
+
+
+
+
+
+
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin: 20px; background:#f7f7f7; color:#222;}
+    .player-wrap { max-width: 900px; margin: 0 auto; background: white; padding: 16px; border-radius: 10px; box-shadow: 0 6px 18px rgba(16, 8, 28, 0.64); }
+    video { width: 100%; height: 520px; background: black; border-radius: 8px; }
+    .playlist { display:flex; gap:12px; margin-top:12px; overflow-x:auto; padding-bottom:6px; }
+    .pl-item { cursor:pointer; width:160px; flex: 0 0 auto; border-radius:8px; overflow:hidden; box-shadow:0 4px 10px rgba(0,0,0,0.06); background:#fff; }
+    .pl-item img { display:block; width:100%; height:90px; object-fit:cover; }
+    .pl-meta { padding:8px; font-size:14px; }
+    .pl-item.active { outline:3px solid #2563eb; transform:translateY(-4px); transition:transform .12s; }
+    .note { font-size:13px; color:#555; margin-top:8px; }
+    .controls { display:flex; gap:8px; align-items:center; margin-top:10px; }
+    button { padding:8px 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer; }
+  </style>
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+  <div class="player-wrap">
+ 
+
+    <!-- Video element -->
+    <video id="video" controls playsinline poster="" crossorigin="anonymous">
+      <!-- Safari will play m3u8 natively; other browsers use hls.js (script below) -->
+      Your browser does not support the video tag.
+    </video>
+
+    <!-- Small controls -->
+    <div class="controls">
+      <button id="playPause">Play / Pause</button>
+      <button id="mute">Mute / Unmute</button>
+      <div class="note" id="status"></div>
+    </div>
+
+    <!-- Playlist thumbnails -->
+    <div class="playlist" id="playlist"></div>
+
+ 
+
+
+
+
+
+
+
+
+  </div>
+
+  <!-- hls.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.0/dist/hls.min.js"></script>
+  <script>
+    // --- VOORBEELD PLAYLIST: pas aan met jouw m3u8 URLs en thumbnails ---
+    const playlist = [
+      {
+        title: "TRT 1",
+        src: "https://tv-trt1.medya.trt.com.tr/master.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "ATV",
+        src: "https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/atv/atv.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+
+      {
+        title: "star",
+        src: "https://emmazbvkkf.turknet.ercdn.net/cnifuowzza/startv/startv.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "KANAL D",
+        src: "https://ackaxsqacw.turknet.ercdn.net/ozfkfbbjba/kanald/kanald.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "SHOW TV",
+        src: "https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/showtv/showtv.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "NOW TV",
+        src: "https://uycyyuuzyh.turknet.ercdn.net/nphindgytw/nowtv/nowtv.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "TV 8",
+        src: "https://rkhubpaomb.turknet.ercdn.net/fwjkgpasof/tv8/tv8.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "TV 8,5",
+        src: "https://rkhubpaomb.turknet.ercdn.net/fwjkgpasof/tv8bucuk/tv8bucuk.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "A 2",
+        src: "https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/a2tv/a2tv.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "TABII TV",
+        src: "https://ceokzokgtd.erbvr.com/tabiitv/tabiitv.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "TEVE 2",
+        src: "https://ackaxsqacw.turknet.ercdn.net/ozfkfbbjba/teve2/teve2.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "KANAL 7",
+        src: "https://yurhnwtpys.turknet.ercdn.net/cvmbjbpmdx/kanal7/kanal7.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "SHOW MAX",
+        src: "https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/showmax/showmax.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "BEYAZ TV",
+        src: "https://beyaztv-live.daioncdn.net/beyaztv/beyaztv.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "360 TV",
+        src: "https://turkmedya-live.ercdn.net/tv360/tv360.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "TRT TÛRK",
+        src: "https://tv-trtturk.medya.trt.com.tr/master.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "TRT AVAZ",
+        src: "https://tv-trtavaz.medya.trt.com.tr/master.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "TLC",
+        src: "https://emmazbvkkf.turknet.ercdn.net/cnifuowzza/tlc/tlc.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "DMAX",
+        src: "https://emmazbvkkf.turknet.ercdn.net/cnifuowzza/dmax/dmax.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "TRT BELGESEL",
+        src: "https://tv-trtbelgesel.medya.trt.com.tr/master.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "TARIH TV",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/tarihtv.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "BBC TV",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/bbc.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "VIASATHISTORY",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/viasathistory.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "VIASATEXPLORE",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/viasatexplore.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "HISTORY",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/history.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "DISCOVERY",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/discovery.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "NATGEO",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/natgeo.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "NATGEOWILD",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/natgeowild.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "MINIKA COCUK",
+        src: "https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/minikago_cocuk/minikago_cocuk.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "MINIKA GO",
+        src: "https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/minikago/minikago.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },
+      {
+        title: "CARTOON NETWORK",
+        src: "https://tv.arectv34.sbs/live/cartoonnetwork.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "TRT COCUK",
+        src: "https://tv-trtcocuk.medya.trt.com.tr/master.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "SÔZCÛ TV",
+        src: "https://izle.canlitvapp.com/sozcu/index.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "HALK TV",
+        src: "https://halktv-live.daioncdn.net/halktv/halktv.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "TELE 1",
+        src: "https://tele1-live.ercdn.net/tele1/tele1.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "FLASH HABER",
+        src: "https://flashhaber-live.ercdn.net/flashhaber/flashhaber.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "NTV",
+        src: "https://dogus-live.daioncdn.net/ntv/ntv_720p.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "BLOOMBERGHT",
+        src: "https://bloomberght-live.daioncdn.net/bloomberght/bloomberght.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "EKOL TV",
+        src: "https://ekoltv-live.ercdn.net/ekoltv/ekoltv.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "HABER GLOBAL",
+        src: "https://ensonhaber-live.ercdn.net/haberglobal/haberglobal.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "TRT HABER",
+        src: "https://tv-trthaber.medya.trt.com.tr/master.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "HABER TÛRK",
+        src: "https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/haberturktv/haberturktv.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "TV 100",
+        src: "https://tv100-live.daioncdn.net/tv100/tv100.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },   
+      {
+        title: "TV 24",
+        src: "https://tv.ensonhaber.com/tv24/tv24_1080p.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "TV 24",
+        src: "https://turkmedya-live.ercdn.net/tv24/tv24.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "MOVIE SMART TÛRK",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/mvturk.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },   
+      {
+        title: "SINEMA AILE 2",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/sinemaaile2.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },   
+      {
+        title: "SINEMA AKSION",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/sinemaaksiyon.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "SINEMA AKSION 2",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/sinemaaksiyon2.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "SINEMA KOMEDI",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbslive/sinemakomedi.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },   
+      {
+        title: "BEIN MOVIE STARS",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/bsstars.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "BEIN MOVIE TÛRK",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/bsturk.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "BEIN MOVIE PREMIERE 1",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/bspremier1.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "BEIN MOVIE FAMILY",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/bsfamily.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },   
+      {
+        title: "BOX OFFICE 1",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/box1.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "BOX OFFICE 2",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/box2.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "BOX OFFICE 3",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/box3.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "TRT MÛZIK",
+        src: "https://tv-trtmuzik.medya.trt.com.tr/master.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "NR1 TÛRK",
+        src: "https://listen.powerapp.com.tr/pturktaptaze/taptaze.smil/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "POWER",
+        src: "https://livetv.powerapp.com.tr/powerTV/powerhd.smil/playist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "POWER TÛRK",
+        src: "https://listen.powerapp.com.tr/pturkakustik/akustik.smil/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "DREAM TÛRK",
+        src: "https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://live.duhnet.tv/S2/HLS_LIVE/dreamturknp/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "BEINSPORT 1",
+        src: "https://one.b2a7fa109ef84a6f.click/live/sbeinsports-1/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "BEINSPORT 2",
+        src: "https://one.b2a7fa109ef84a6f.click/live/sbeinsports-2/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "BEINSPORT 3",
+        src: "https://one.b2a7fa109ef84a6f.click/live/sbeinsports-3/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "BEINSPORT 4",
+        src: "https://one.b2a7fa109ef84a6f.click/live/sbeinsports-4/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "BEINSPORT 5",
+        src: "https://one.b2a7fa109ef84a6f.click/live/sbeinsports-5/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "BEINSPORT MAX 1",
+        src: "https://one.b2a7fa109ef84a6f.click/live/sbeinsportsmax-1/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "BEINSPORT MAX 2",
+        src: "https://one.b2a7fa109ef84a6f.click/live/sbeinsportsmax-2/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "TIVIBU SPOR 1",
+        src: "https://one.b2a7fa109ef84a6f.click/live/stivibuspor-1/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "TIVIBU SPOR 2",
+        src: "https://one.b2a7fa109ef84a6f.click/live/stivibuspor-2/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },     
+      {
+        title: "TIVIBU SPOR 3",
+        src: "https://one.b2a7fa109ef84a6f.click/live/stivibuspor-3/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },     
+      {
+        title: "TIVIBU SPOR 4",
+        src: "https://one.b2a7fa109ef84a6f.click/live/stivibuspor-4/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },   
+      {
+        title: "S SPOR",
+        src: "https://one.b2a7fa109ef84a6f.click/live/sssport/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "S SPOR 2",
+        src: "https://one.b2a7fa109ef84a6f.click/live/sssport2/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "S SPORT +1",
+        src: "https://one.b2a7fa109ef84a6f.click/live/sssplus1/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },   
+      {
+        title: "S SPORT +2",
+        src: "https://one.b2a7fa109ef84a6f.click/live/sssplus2/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "SMART 1",
+        src: "https://one.b2a7fa109ef84a6f.click/live/ssmartspor/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }, 
+      {
+        title: "SMART 2",
+        src: "https://one.b2a7fa109ef84a6f.click/live/ssmartspor2/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "EUROSPORT 1",
+        src: "https://one.b2a7fa109ef84a6f.click/live/seurosport1/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+      {
+        title: "EUROSPORT 2",
+        src: "https://one.b2a7fa109ef84a6f.click/live/seurosport2/playlist.m3u8",
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      },  
+  
+
+      {
+        title: "A SPOR",
+        src: "https://one.b2a7fa109ef84a6f.click/live/saspor/playlist.m3u8", // voorbeeld; vervang door werkende URL
+        img: "https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?w=800&q=60"
+      }
+    ];
+
+    const video = document.getElementById('video');
+    const playlistEl = document.getElementById('playlist');
+    const statusEl = document.getElementById('status');
+
+    // Render playlist thumbnails
+    playlist.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'pl-item';
+      div.innerHTML = `
+        <img src="${item.img}" alt="${escapeHtml(item.title)}" />
+        <div class="pl-meta"><strong>${escapeHtml(item.title)}</strong></div>
+      `;
+      div.addEventListener('click', () => loadStream(idx));
+      playlistEl.appendChild(div);
+    });
+
+    // Keep track of active index
+    let activeIndex = -1;
+    function setActive(index) {
+      Array.from(playlistEl.children).forEach((c,i) => c.classList.toggle('active', i===index));
+      activeIndex = index;
+    }
+
+    // Load a stream by index
+    async function loadStream(index) {
+      const item = playlist[index];
+      if (!item) return;
+      setActive(index);
+      statusEl.textContent = `Laden: ${item.title}`;
+
+      // Set poster for the video element to the thumbnail
+      video.setAttribute('poster', item.img);
+
+      // If browser supports HLS natively (Safari), set src directly
+      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = item.src;
+        try { await video.play(); } catch(e) { /* user gesture required */ }
+        statusEl.textContent = `Speelt: ${item.title}`;
+        return;
+      }
+
+      // Otherwise use hls.js
+      if (window.Hls && Hls.isSupported()) {
+        if (window._hls) {
+          window._hls.destroy();
+          window._hls = null;
+        }
+        const hls = new Hls();
+        window._hls = hls;
+        hls.loadSource(item.src);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          video.play().catch(()=>{ /* autoplay prevented */ });
+        });
+        hls.on(Hls.Events.ERROR, function(event, data) {
+          console.error('hls error', event, data);
+          statusEl.textContent = `Fout bij laden: ${data.type} / ${data.details}`;
+        });
+        statusEl.textContent = `  ${item.title}`;
+      } else {
+        statusEl.textContent = 'HLS niet ondersteund in deze browser';
+      }
+    }
+
+    // Load first stream on start
+    if (playlist.length) loadStream(0);
+
+    // Simple control buttons
+    document.getElementById('playPause').addEventListener('click', () => {
+      if (video.paused) video.play();
+      else video.pause();
+    });
+    document.getElementById('mute').addEventListener('click', () => {
+      video.muted = !video.muted;
+    });
+
+    // Utility: escape HTML to avoid injection if titles come from untrusted source
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+
+    // Optional: show console helpfulness
+    console.log('Playlist geladen:', playlist);
+  </script>
+</body>
+</html>
