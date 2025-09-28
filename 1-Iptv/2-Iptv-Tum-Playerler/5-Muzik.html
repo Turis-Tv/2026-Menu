@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="nl">
+<head>
+
+
+<style>
+  /* --- Hamburger menu --- */
+  .hamburger {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 30px;
+    height: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    z-index: 2000;
+  }
+  .hamburger span {
+    display: block;
+    height: 4px;
+    background: #fff;
+    border-radius: 2px;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background: #111a2f;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.6);
+    transition: left 0.3s ease;
+    padding: 1px;
+    z-index: 1500;
+  }
+  .sidebar.active {
+    left: 0;
+  }
+  .sidebar h3 {
+    margin-top: 0;
+    color: #06b6d4;
+  }
+  .sidebar a {
+    display: block;
+    color: #e6eef6;
+    text-decoration: none;
+    margin: 10px 0;
+  }
+</style>
+
+<body>
+  <!-- Hamburger icoon -->
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <!-- Zijmenu --> 
+  <div class="sidebar" id="sidebar"><br><br><br> 
+    <a href="1-Ulusal.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ulusal</a>
+    <a href="2-Haber.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Haberler</a>
+    <a href="3-Spor.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sporlar</a>
+    <a href="4-Belgesel.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Belgesel</a>
+    <a href="5-Muzik.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mûzik</a>
+    <a href="6-Film.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Filmler</a>
+    <a href="7-Cocuk.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Çocuk</a>
+  </div>
+
+  <div class="player-card">
+    ...
+  </div>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const sidebar = document.getElementById('sidebar');
+
+  hamburger.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+  });
+</script>
+</body>
+
+
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ingebouwde M3U IPTV Speler</title>
+  <style>
+
+
+
+
+
+
+
+
+
+    body{margin:0;font-family:Arial, sans-serif;background:#0f1724;color:#e6eef6;display:flex;flex-direction:column;align-items:center;padding:20px;}
+    .player-card{width:100%;max-width:960px;background:#111a2f;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.6);padding:16px;}
+    .video-wrap{position:relative;padding-top:56.25%;background:#000;border-radius:8px;overflow:hidden;}
+    video{position:absolute;top:0;left:0;width:100%;height:100%;}
+    .controls{margin-top:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+    select,button{padding:8px;border-radius:6px;border:1px solid #444;background:#1a2238;color:#fff;}
+    button{cursor:pointer;background:linear-gradient(90deg,#06b6d4,#0284c7);border:none;font-weight:bold;}
+  </style>
+</head>
+<body>
+  <div class="player-card">
+    <div class="video-wrap">
+      <video id="video" controls playsinline crossorigin="anonymous"></video>
+    </div>
+
+    <div class="controls">
+      <label>Kanaal:</label>
+      <select id="channelList"></select>
+      <button id="playBtn">Play</button>
+      <button id="muteBtn">Mute</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.5/dist/hls.min.js"></script>
+  <script>
+    const video = document.getElementById('video');
+    const channelList = document.getElementById('channelList');
+    const playBtn = document.getElementById('playBtn');
+    const muteBtn = document.getElementById('muteBtn');
+    let hls;
+
+    // Ingebouwde M3U playlist (voorbeeld)
+    const m3uData = `#EXTM3U
+
+
+ 
+
+
+
+#EXTINF:-1 tvg-logo="https://dummyimage.com/40x40/09f/fff.png&text=1", TRT MÛZIK
+https://tv-trtmuzik.medya.trt.com.tr/master.m3u8
+#EXTINF:-1 tvg-logo="https://dummyimage.com/40x40/09f/fff.png&text=1", NrR1 TÛRK
+https://listen.powerapp.com.tr/pturktaptaze/taptaze.smil/playlist.m3u8
+#EXTINF:-1 tvg-logo="https://dummyimage.com/40x40/09f/fff.png&text=1", POWER
+https://livetv.powerapp.com.tr/powerTV/powerhd.smil/playist.m3u8
+#EXTINF:-1 tvg-logo="https://dummyimage.com/40x40/09f/fff.png&text=1", POWER TÛRK
+https://listen.powerapp.com.tr/pturkakustik/akustik.smil/playlist.m3u8
+#EXTINF:-1 tvg-logo="https://dummyimage.com/40x40/09f/fff.png&text=1", DREAMTÛRK
+https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://live.duhnet.tv/S2/HLS_LIVE/dreamturknp/playlist.m3u8`;
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Parser
+    function parseM3U(content) {
+      const lines = content.split(/\r?\n/);
+      let list = [];
+      let current = null;
+
+      for (let line of lines) {
+        if (line.startsWith('#EXTINF')) {
+          const info = line.match(/-1.*,(.*)$/);
+          const title = info ? info[1] : 'Onbekend';
+          const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+          current = { title, logo: logoMatch ? logoMatch[1] : null };
+        } else if (line && !line.startsWith('#')) {
+          if (current) {
+            current.url = line.trim();
+            list.push(current);
+            current = null;
+          }
+        }
+      }
+      return list;
+    }
+
+    function populateChannels(list) {
+      channelList.innerHTML = '';
+      list.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.url;
+        opt.textContent = c.title;
+        channelList.appendChild(opt);
+      });
+    }
+
+
+
+// Kanaal direct afspelen bij wissel in de lijst
+channelList.addEventListener('change', () => {
+  currentIndex = channelList.selectedIndex;
+  loadStream(channelList.value, true);
+});
+
+    function loadStream(url) {
+      if (!url) return;
+      if (hls) { hls.destroy(); hls = null; }
+      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+        video.play().catch(()=>{});
+      } else if (Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(()=>{}));
+      } else {
+        alert('HLS niet ondersteund in deze browser');
+      }
+    }
+
+    // Init
+    const channels = parseM3U(m3uData);
+    populateChannels(channels);
+
+    playBtn.addEventListener('click', () => {
+      loadStream(channelList.value);
+    });
+
+    muteBtn.addEventListener('click', () => {
+      video.muted = !video.muted;
+      muteBtn.textContent = video.muted ? 'Unmute' : 'Mute';
+    });
+  </script>
+</body>
+</html>
