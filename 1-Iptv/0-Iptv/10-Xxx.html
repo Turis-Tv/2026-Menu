@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>IPTV Online Speler</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      margin: 0;
+    }
+    header {
+      background: #222;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      font-size: 20px;
+    }
+    nav {
+      display: none;
+      flex-direction: column;
+      background: #333;
+    }
+    nav a {
+      color: #fff;
+      padding: 10px;
+      text-decoration: none;
+    }
+    nav a:hover {
+      background: #444;
+    }
+    .hamburger {
+      cursor: pointer;
+      font-size: 24px;
+    }
+    .player-container {
+      max-width: 800px;
+      width: 100%;
+      margin: 20px auto;
+      padding: 0 10px;
+    }
+    video {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #000;
+    }
+    .channel {
+      display: flex;
+      align-items: center;
+      margin-top: 15px;
+    }
+    .channel img {
+      width: 80px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-right: 12px;
+    }
+    .dropdown {
+      margin-top: 15px;
+      background: #222;
+      padding: 8px;
+      border-radius: 6px;
+    }
+    .dropdown select {
+      width: 100%;
+      padding: 6px;
+      border-radius: 4px;
+      border: none;
+    }
+    @media (min-width: 768px) {
+      nav {
+        display: flex !important;
+        flex-direction: row;
+        background: none;
+      }
+      .hamburger {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <nav id="navMenu">
+      <a href="1-Ulusal.html">Ulusal</a>
+      <a href="2-Haber.html">Haber</a>
+      <a href="3-Spor.html">Spor</a>
+      <a href="4-Muzik.html">Müzik</a>
+      <a href="5-Belgesel.html">Belgesel</a>
+      <a href="6-Dini.html">Dini</a>
+      <a href="7-Çocuk.html">Çocuk</a>
+      <a href="8-Film.html">Film</a>
+      <a href="9-Youtube.html">Youtube</a>
+      <a href="10-Ana-Sayfa.html">Ana Sayfa</a>
+
+    </nav>
+  </header>
+
+  <div class="player-container">
+    <video id="video" controls autoplay></video>
+
+    <div class="channel">
+      <img id="channelLogo" src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Logo-sample.png" alt="Kanaal Logo">
+      <span id="channelName">Voorbeeld Kanaal</span>
+    </div>
+
+    <div class="dropdown">
+      <label for="channelSelect">KANAL SEÇ</label>
+      <select id="channelSelect">
+
+
+
+
+<option value="https://tv-trt1.medya.trt.com.tr/master.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TRT 1</option>
+<option value="https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/atv/atv.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">ATV</option>
+<option value="https://ackaxsqacw.turknet.ercdn.net/ozfkfbbjba/kanald/kanald.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">KANAL D</option>
+<option value="https://emmazbvkkf.turknet.ercdn.net/cnifuowzza/startv/startv.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">STAR TV</option>
+<option value="https://uycyyuuzyh.turknet.ercdn.net/nphindgytw/nowtv/nowtv.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">NOW TV</option>
+<option value="https://rkhubpaomb.turknet.ercdn.net/fwjkgpasof/tv8/tv8.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TV 8</option>
+<option value="https://rkhubpaomb.turknet.ercdn.net/fwjkgpasof/tv8bucuk/tv8bucuk.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TV 8,5</option>
+<option value="https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/a2tv/a2tv.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">A2</option>
+<option value="https://ceokzokgtd.erbvr.com/tabiitv/tabiitv.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TABii TV</option>
+<option value="https://ackaxsqacw.turknet.ercdn.net/ozfkfbbjba/teve2/teve2.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TEVE 2</option>
+<option value="https://yurhnwtpys.turknet.ercdn.net/cvmbjbpmdx/kanal7/kanal7.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">KANAL 7</option>
+<option value="https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/showmax/showmax.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">SHOWMAX</option>
+<option value="https://beyaztv-live.daioncdn.net/beyaztv/beyaztv.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BEYAZ TV</option>
+<option value="https://turkmedya-live.ercdn.net/tv360/tv360.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TV 360</option>
+<option value="https://tv-trtturk.medya.trt.com.tr/master.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TRT TÛRK</option>
+<option value="https://tv-trtavaz.medya.trt.com.tr/master.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TRT AVAZ</option>
+<option value="https://emmazbvkkf.turknet.ercdn.net/cnifuowzza/tlc/tlc.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TLC</option>
+<option value="https://emmazbvkkf.turknet.ercdn.net/cnifuowzza/dmax/dmax.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">DMAX</option>
+<option value="https://tv-trtbelgesel.medya.trt.com.tr/master.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BELGESEL TV</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/tarihtv.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TARIH TV</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/bbc.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BBC</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/viasathistory.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">VIASIT HISTORY</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/viasatexplore.m3u8" data-logo="hhttps://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">VIASIT EXPLORE</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/history.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">HISTORY</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/discovery.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">DISCOVERY</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/natgeo.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">NATGEO</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/natgeowild.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">NATGEO WILD</option>
+<option value="https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/minikago_cocuk/minikago_cocuk.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">MINIKA COCUK</option>
+<option value="https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/minikago/minikago.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">MINIKAGO</option>
+<option value="https://tv.arectv34.sbs/live/cartoonnetwork.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">CARTOON</option>
+<option value="https://tv-trtcocuk.medya.trt.com.tr/master.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TRT COCUK</option>
+<option value="https://izle.canlitvapp.com/sozcu/index.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">SÔZCÛ TV</option>
+<option value="https://halktv-live.daioncdn.net/halktv/halktv.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">HALK TV</option>
+<option value="https://tele1-live.ercdn.net/tele1/tele1.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TELE 1</option>
+<option value="https://flashhaber-live.ercdn.net/flashhaber/flashhaber.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">FLASH HABER</option>
+<option value="https://dogus-live.daioncdn.net/ntv/ntv_720p.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">NTV</option>
+<option value="https://bloomberght-live.daioncdn.net/bloomberght/bloomberght.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BLOOMBERGH</option>
+<option value="https://ekoltv-live.ercdn.net/ekoltv/ekoltv.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">EKOL TV</option>
+<option value="https://ensonhaber-live.ercdn.net/haberglobal/haberglobal.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">HABER GLOBAL</option>
+<option value="https://tv-trthaber.medya.trt.com.tr/master.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TRT HABER</option>
+<option value="https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/haberturktv/haberturktv.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">HABER TÛRK</option>
+<option value="https://tv100-live.daioncdn.net/tv100/tv100.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TV 100</option>
+<option value="https://tv.ensonhaber.com/tv24/tv24_1080p.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TV 24</option>
+<option value="https://turkmedya-live.ercdn.net/tv24/tv24.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TV 24</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/mvturk.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">MOVIE SMART TÛRK</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/sinemaaile2.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">SINEMA 2</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/sinemaaksiyon.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">SINEMA ACTION</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/sinemaaksiyon2.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">SINEMA ACTION 2</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbslive/sinemakomedi.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">SINEMA KOMEDI</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/bsstars.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BEIN MOVIE STAR</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/bsturk.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BEIN MOVIE TÛRK</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/bspremier1.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BEIN MOVIE TÛRK</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/bsfamily.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BEIN MOVIE FAMILY</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/box1.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BOX OFFICE 1</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/box2.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BOX OFFICE 2</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://tv1.arectv30.sbs/live/box3.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BOX OFFICE 3</option>
+<option value="https://tv-trtmuzik.medya.trt.com.tr/master.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TRT MÛZIK</option>
+<option value="https://listen.powerapp.com.tr/pturktaptaze/taptaze.smil/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">NUMMER 1 TÛRK</option>
+<option value="https://livetv.powerapp.com.tr/powerTV/powerhd.smil/playist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">POWER TV</option>
+<option value="https://listen.powerapp.com.tr/pturkakustik/akustik.smil/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">POWER TÛRK</option>
+<option value="https://ancient-shape-c20a.yedekbirkankam.workers.dev/https://live.duhnet.tv/S2/HLS_LIVE/dreamturknp/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">DREAM TÛRK</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/sbeinsports-1/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BEIN SPORT 1</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/sbeinsports-2/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BEIN SPORT 2</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/sbeinsports-3/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BEIN SPORT 3</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/sbeinsports-4/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BEIN SPORT 4</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/sbeinsports-5/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BEIN SPORT 5</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/sbeinsportsmax-1/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BEIN SPORT MAX</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/sbeinsportsmax-2/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">BEIN SPORT MAX 2</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/stivibuspor-1/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TIVIBU SPOR 1</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/stivibuspor-2/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TIVIBU SPOR 2</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/stivibuspor-3/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TIVIBU SPOR 3</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/stivibuspor-4/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">TIVIBU SPOR 4</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/sssport/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">SS SPORT</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/sssport2/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">SS SPORT 2</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/sssplus1/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">SS SPORT +1</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/sssplus2/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">SS SPORT +2</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/ssmartspor/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">SMART 1</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/ssmartspor2/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">SMART 2</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/seurosport1/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">EUROSPORT 1</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/seurosport2/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">EUROSPORT 2</option>
+<option value="https://one.b2a7fa109ef84a6f.click/live/saspor/playlist.m3u8" data-logo="https://od.lk/s/OTFfMzE0ODA3Mzlf/Turis1.jpg">A ASPOR</option>
+
+
+
+
+
+
+
+
+      </select>
+    </div>
+  </div>
+
+  <!-- HLS.js -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const video = document.getElementById('video');
+    const channelSelect = document.getElementById('channelSelect');
+    const channelLogo = document.getElementById('channelLogo');
+    const channelName = document.getElementById('channelName');
+    let hls;
+
+    function loadStream(url, logo, name) {
+      if (hls) {
+        hls.destroy();
+      }
+      if (Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+      }
+      channelLogo.src = logo;
+      channelName.textContent = name;
+    }
+
+    channelSelect.addEventListener('change', function() {
+      const selectedOption = channelSelect.options[channelSelect.selectedIndex];
+      loadStream(selectedOption.value, selectedOption.dataset.logo, selectedOption.text);
+    });
+
+    // start met eerste kanaal
+    const firstOption = channelSelect.options[0];
+    loadStream(firstOption.value, firstOption.dataset.logo, firstOption.text);
+
+    function toggleMenu() {
+      const navMenu = document.getElementById('navMenu');
+      navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+    }
+  </script>
+</body>
+</html>

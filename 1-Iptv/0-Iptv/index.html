@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Filmpagina — Responsive met hamburgermenu</title>
+  <style>
+    :root{
+      --nav-height:64px;
+      --accent: rgba(255,255,255,0.9);
+      --glass: rgba(255,255,255,0.06);
+      --glass-strong: rgba(255,255,255,0.12);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+
+    /* volledige achtergrondafbeelding die de hele pagina bedekt */
+    body{
+      background-image: url('https://images.unsplash.com/photo-1517604931442-7f0897a0b6a6?auto=format&fit=crop&w=1950&q=80'); /* voorbeeld afbeelding - vervang door jouw afbeelding */
+      background-size:cover;
+      background-position:center center;
+      background-repeat:no-repeat;
+      color:var(--accent);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* subtiele overlay om tekst leesbaar te maken */
+    .overlay{
+      position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.6));
+    }
+
+    /* NAVBAR */
+    header{
+      position:fixed;top:0;left:0;right:0;height:var(--nav-height);display:flex;align-items:center;justify-content:space-between;padding:0 1rem;z-index:40;
+      backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.08));
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .brand{display:flex;align-items:center;gap:.6rem;font-weight:700}
+    .brand .logo{width:40px;height:40px;border-radius:6px;overflow:hidden;flex-shrink:0;display:grid;place-items:center;background:rgba(255,255,255,0.08)}
+    nav{display:flex;align-items:center;gap:1rem}
+    nav a{color:var(--accent);text-decoration:none;padding:.5rem .6rem;border-radius:6px;font-weight:600}
+    nav a:hover{background:var(--glass-strong)}
+
+    /* desktop links visible, mobile hidden */
+    .nav-links{display:flex;gap:.4rem}
+    .actions{display:flex;gap:.5rem}
+    .btn{padding:.45rem .7rem;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.06);cursor:pointer}
+
+    /* hamburger */
+    .hamburger{display:none;width:44px;height:44px;align-items:center;justify-content:center;border-radius:8px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.04);cursor:pointer}
+    .hamburger span{display:block;width:20px;height:2px;background:var(--accent);position:relative}
+    .hamburger span::before,.hamburger span::after{content:'';position:absolute;left:0;right:0;height:2px;background:var(--accent)}
+    .hamburger span::before{top:-6px}
+    .hamburger span::after{top:6px}
+
+    /* mobiele menu (off-canvas dropdown) */
+    .mobile-menu{position:fixed;top:var(--nav-height);right:16px;width:260px;background:linear-gradient(180deg, rgba(10,10,10,0.75), rgba(10,10,10,0.9));border-radius:12px;padding:10px;backdrop-filter: blur(8px);box-shadow:0 8px 30px rgba(0,0,0,0.6);transform-origin:top right;opacity:0;pointer-events:none;transform:translateY(-10px) scale(.98);transition:all .22s ease;z-index:45}
+    .mobile-menu.open{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
+    .mobile-menu a{display:block;padding:.7rem .8rem;border-radius:8px;color:var(--accent);text-decoration:none;font-weight:600}
+    .mobile-menu a:hover{background:rgba(255,255,255,0.03)}
+
+    /* MAIN content */
+    main{margin-top:var(--nav-height);padding:2.2rem 1.2rem 3.5rem;flex:1;display:flex;align-items:flex-start;justify-content:center}
+    .container{width:1200px;max-width:calc(100% - 2.4rem)}
+
+    /* hero + film cards */
+    .hero{display:flex;gap:1.2rem;align-items:flex-start}
+    .hero-left{flex:1}
+    .hero-right{width:380px}
+
+    .glass-card{background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));padding:1rem;border-radius:12px;border:1px solid rgba(255,255,255,0.06);box-shadow:0 6px 28px rgba(0,0,0,0.6)}
+
+    .movie-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-top:1rem}
+    .movie{border-radius:10px;overflow:hidden;background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.5));height:260px;display:flex;flex-direction:column}
+    .poster{flex:1;background-size:cover;background-position:center}
+    .movie-info{padding:.6rem}
+    .movie-info h4{margin:0 0 .2rem;font-size:1rem}
+    .movie-info p{margin:0;font-size:.85rem;color:rgba(255,255,255,0.75)}
+
+    /* responsive */
+    @media (max-width:900px){
+      .nav-links{display:none}
+      .hamburger{display:flex}
+      .hero{flex-direction:column}
+      .hero-right{width:100%}
+    }
+
+    @media (max-width:420px){
+      .mobile-menu{right:8px;width:90%}
+      .movie{height:220px}
+    }
+
+    /* small accessibility focus styles */
+    a:focus,button:focus{outline:3px solid rgba(255,255,255,0.14);outline-offset:2px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+  
+  
+      </div>
+    </div>
+
+    <nav aria-label="Hoofdmenu">
+      <div class="nav-links">
+        <a href="#" tabindex="0">Home</a>
+        <a href="#nieuws">Nieuws</a>
+        <a href="#populair">Populair</a>
+        <a href="#genres">Genres</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="actions">
+    
+ 
+      </div>
+      <button class="hamburger" id="hambtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" role="menu" aria-hidden="true">
+    <a href="1-Ulusal.html">Ulusal</a>
+    <a href="2-Haber.html">Haber</a>
+    <a href="3-Spor.html">Spor</a>
+    <a href="4-Muzik.html">Müzik</a>
+    <a href="5-Belgesel.html">Belgesel</a>
+    <a href="6-Dini.html">Dini</a>
+    <a href="7-Cocuk.html">Çocuk</a>
+    <a href="8-Film.html">Film</a>
+    <a href="9-Youtube.html">Youtube</a>
+    <a href="10-xxx.html">+ 18 xxx </a>
+    <a href="11-Yedek.html">Yedek</a>
+    <a href="12-index.html">Ana Sayfa</a>
+    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.04);margin:8px 0">
+    <a href="#">Testler</a>
+  </div>
+
+  <div class="overlay" aria-hidden="true"></div>
+
+  <main>
+    <div class="container">
+      <section class="hero">
+        <div class="hero-left">
+          <div class="glass-card">
+            <h1 style="margin:0 0 .25rem">Nieuwe releases</h1>
+            <p style="margin:0;color:rgba(255,255,255,0.75)">Bekijk de laatste trailers, recensies en aanbevolen films.</p>
+
+            <div class="movie-grid" style="margin-top:1rem">
+   
+
+
+<article class="movie" aria-label="Film: Nachtvlucht">
+  <a href="https://example.com" target="_blank">
+    <div class="poster" style="background-image:url('https://od.lk/s/NzJfNDc2NjA0NTVf/ulusal.png?auto=format&fit=crop&w=800&q=80'); 
+         width: 200px; height: 220px; background-size: cover; background-position: center; border-radius: 8px;">
+    </div></a><div class="movie-info">
+    <h4>Ulusal </h4>              
+  </div>
+</article>
+
+
+
+
+
+
+<article class="movie" aria-label="Film: Nachtvlucht">
+  <a href="https://example.com" target="_blank">
+    <div class="poster" style="background-image:url('https://od.lk/s/NzJfNDc2NjA0NTJf/haber1.png?auto=format&fit=crop&w=800&q=80'); 
+         width: 200px; height: 220px; background-size: cover; background-position: center; border-radius: 8px;">
+    </div></a><div class="movie-info">
+    <h4>Haber</h4>              
+  </div>
+</article>
+
+
+<article class="movie" aria-label="Film: Nachtvlucht">
+  <a href="https://example.com" target="_blank">
+    <div class="poster" style="background-image:url('https://od.lk/s/NzJfNDc2NjA0NTRf/spor.png?auto=format&fit=crop&w=800&q=80'); 
+         width: 200px; height: 220px; background-size: cover; background-position: center; border-radius: 8px;">
+    </div></a><div class="movie-info">
+    <h4>Spor</h4>              
+  </div>
+</article>
+
+
+<article class="movie" aria-label="Film: Nachtvlucht">
+  <a href="https://example.com" target="_blank">
+    <div class="poster" style="background-image:url('https://od.lk/s/NzJfNDc2NjA0NTNf/muzik.png?auto=format&fit=crop&w=800&q=80'); 
+         width: 200px; height: 220px; background-size: cover; background-position: center; border-radius: 8px;">
+    </div></a><div class="movie-info">
+    <h4>Müzik</h4>              
+  </div>
+</article>
+
+
+<article class="movie" aria-label="Film: Nachtvlucht">
+  <a href="https://example.com" target="_blank">
+    <div class="poster" style="background-image:url('https://od.lk/s/NzJfNDc2NjA1MTJf/belgesel.png?auto=format&fit=crop&w=800&q=80'); 
+         width: 200px; height: 220px; background-size: cover; background-position: center; border-radius: 8px;">
+    </div></a><div class="movie-info">
+    <h4>Belgesel</h4>              
+  </div>
+</article>
+
+
+<article class="movie" aria-label="Film: Nachtvlucht">
+  <a href="https://example.com" target="_blank">
+    <div class="poster" style="background-image:url('https://od.lk/s/NzJfNDc2NjA0NTBf/dini.png?auto=format&fit=crop&w=800&q=80'); 
+         width: 200px; height: 220px; background-size: cover; background-position: center; border-radius: 8px;">
+    </div></a><div class="movie-info">
+    <h4>Dini</h4>              
+  </div>
+</article>
+
+
+<article class="movie" aria-label="Film: Nachtvlucht">
+  <a href="https://example.com" target="_blank">
+    <div class="poster" style="background-image:url('https://od.lk/s/NzJfNDc2NjA0NDlf/cocuk.png?auto=format&fit=crop&w=800&q=80'); 
+         width: 200px; height: 220px; background-size: cover; background-position: center; border-radius: 8px;">
+    </div></a><div class="movie-info">
+    <h4>Çocuk</h4>              
+  </div>
+</article>
+
+
+<article class="movie" aria-label="Film: Nachtvlucht">
+  <a href="https://example.com" target="_blank">
+    <div class="poster" style="background-image:url('https://od.lk/s/NzJfNDc2NjA0NTFf/film.png?auto=format&fit=crop&w=800&q=80'); 
+         width: 200px; height: 220px; background-size: cover; background-position: center; border-radius: 8px;">
+    </div></a><div class="movie-info">
+    <h4>Film</h4>              
+  </div>
+</article>
+
+
+<article class="movie" aria-label="Film: Nachtvlucht">
+  <a href="https://example.com" target="_blank">
+    <div class="poster" style="background-image:url('https://od.lk/s/NzJfNDc2NjA0NDZf/youtube.png?auto=format&fit=crop&w=800&q=80'); 
+         width: 200px; height: 220px; background-size: cover; background-position: center; border-radius: 8px;">
+    </div></a><div class="movie-info">
+    <h4>Youtube</h4>              
+  </div>
+</article>
+
+
+<article class="movie" aria-label="Film: Nachtvlucht">
+  <a href="https://example.com" target="_blank">
+    <div class="poster" style="background-image:url('https://od.lk/s/NzJfNDc2NjA0NTZf/xxx.png?auto=format&fit=crop&w=800&q=80'); 
+         width: 200px; height: 220px; background-size: cover; background-position: center; border-radius: 8px;">
+    </div></a><div class="movie-info">
+    <h4>xxx</h4>              
+  </div>
+</article>
+
+
+<article class="movie" aria-label="Film: Nachtvlucht">
+  <a href="https://example.com" target="_blank">
+    <div class="poster" style="background-image:url('https://od.lk/s/NzJfNDc2NjA1MTFf/ana-sayfa.png?auto=format&fit=crop&w=800&q=80'); 
+         width: 200px; height: 220px; background-size: cover; background-position: center; border-radius: 8px;">
+    </div></a><div class="movie-info">
+    <h4>Ana Sayfa</h4>              
+  </div>
+</article>
+
+<article class="movie" aria-label="Film: Nachtvlucht">
+  <a href="https://example.com" target="_blank">
+    <div class="poster" style="background-image:url('https://od.lk/s/NzJfNDc2NjA0NTdf/yedek.png?auto=format&fit=crop&w=800&q=80'); 
+         width: 200px; height: 220px; background-size: cover; background-position: center; border-radius: 8px;">
+    </div></a><div class="movie-info">
+    <h4>Yedek</h4>              
+  </div>
+</article>
+
+
+
+
+            </div>
+          </div>
+        </div>
+
+ 
+        
+              </div>
+            </div>
+            <div style="display:flex;gap:.5rem;margin-top:.8rem">
+       
+            </div>
+          </div>
+        </aside>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // eenvoudige toggles voor het hamburger menu
+    const hambtn = document.getElementById('hambtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hambtn.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('open');
+      hambtn.setAttribute('aria-expanded', String(open));
+      mobileMenu.setAttribute('aria-hidden', String(!open));
+    });
+
+    // klik buiten om menu te sluiten
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.classList.contains('open')) return;
+      const target = e.target;
+      if (!mobileMenu.contains(target) && !hambtn.contains(target)){
+        mobileMenu.classList.remove('open');
+        hambtn.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden','true');
+      }
+    });
+
+    // sluit met escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('open')){
+        mobileMenu.classList.remove('open');
+        hambtn.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden','true');
+        hambtn.focus();
+      }
+    });
+  </script>
+</body>
+</html>
