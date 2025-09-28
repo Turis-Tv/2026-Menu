@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPTV Menu + Player</title>
+  <style>
+
+
+.menu a {
+  color: inherit;       /* neemt de witte kleur van het menu over */
+  text-decoration: none; /* geen onderstreping */
+  display: block;        /* link vult de hele li */
+  width: 100%;
+  height: 100%;
+}
+
+
+
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 10px;
+      color: #0f9dff;
+      margin: 0;
+    }
+
+    /* Header met 2 hamburgers */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: #222;
+    }
+
+    .hamburger {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.0rem;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .hamburger:focus {
+      outline: none;
+    }
+
+    /* Slide-in menu stijl */
+    .menu {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 70%;
+      max-width: 300px;
+      background: #222;
+      padding: 20px;
+      list-style: none;
+      margin: 0;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .menu.right {
+      right: 0;
+      left: auto;
+      transform: translateX(100%);
+    }
+
+    .menu.active {
+      transform: translateX(0);
+    }
+
+    .menu li {
+      padding: 10px;
+      border-bottom: 1px solid #333;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    .menu li:hover {
+      background: #0f9dff;
+      color: #fff;
+    }
+
+    .menu img {
+      width: 40px;
+      height: 30px;
+      object-fit: cover;
+      margin-right: 10px;
+      vertical-align: middle;
+      border-radius: 4px;
+    }
+
+    /* Overlay voor mobiel */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 999;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    video {
+      width: 100%;
+      height: 60vh;
+      background: #000;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+
+    <div>
+      <button class="hamburger" onclick="toggleMenu('menu1')">☰ Kanallar</button>&ensp;&ensp;&ensp;&ensp;&ensp;
+      <button class="hamburger" onclick="toggleMenu('menu2')">☰ Kategoriler</button>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay" onclick="closeMenus()"></div>
+
+  <!-- Zenders menu (links) -->
+  <ul class="menu" id="menu1">
+    <li data-stream="https://tv-trt1.medya.trt.com.tr/master.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=TRT+1"> TRT 1
+    </li>
+    <li data-stream="https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/atv/atv.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=ATV"> ATV
+    </li>
+    <li data-stream="https://ackaxsqacw.turknet.ercdn.net/ozfkfbbjba/kanald/kanald.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> KANAL D 
+    </li>
+    <li data-stream="https://emmazbvkkf.turknet.ercdn.net/cnifuowzza/startv/startv.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> STAR TV 
+    </li>
+    <li data-stream="https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/showtv/showtv.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> SHOW TV
+    </li>
+    <li data-stream="https://uycyyuuzyh.turknet.ercdn.net/nphindgytw/nowtv/nowtv.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> NOW 
+    </li>
+    <li data-stream="https://rkhubpaomb.turknet.ercdn.net/fwjkgpasof/tv8/tv8.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> TV 8  
+    </li>
+    <li data-stream="https://rkhubpaomb.turknet.ercdn.net/fwjkgpasof/tv8bucuk/tv8bucuk.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> TV 8,5 
+    </li>
+    <li data-stream="https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/a2tv/a2tv.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> A2 
+    </li>
+    <li data-stream="https://ceokzokgtd.erbvr.com/tabiitv/tabiitv.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> TABII TV 
+    </li>
+    <li data-stream="https://ackaxsqacw.turknet.ercdn.net/ozfkfbbjba/teve2/teve2.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> TEVE 2
+    </li>
+    <li data-stream="https://yurhnwtpys.turknet.ercdn.net/cvmbjbpmdx/kanal7/kanal7.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> KANAL 7 
+    </li>
+    <li data-stream="https://rmtftbjlne.turknet.ercdn.net/bpeytmnqyp/showmax/showmax.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> SHOWMAX
+    </li>
+    <li data-stream="https://beyaztv-live.daioncdn.net/beyaztv/beyaztv.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> BEYAZ TV 
+    </li>
+    <li data-stream="https://turkmedya-live.ercdn.net/tv360/tv360.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> TV 360
+    </li>
+    <li data-stream="https://tv-trtturk.medya.trt.com.tr/master.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> TRT TÛRK 
+    </li>
+    <li data-stream="https://tv-trtavaz.medya.trt.com.tr/master.m3u8">
+      <img src="https://od.lk/s/NzJfNDc2NjA1NTRf/turistv.png?text=Kanal+D"> TRT AVAZ
+    </li>
+
+
+
+
+
+
+
+
+  
+
+  </ul>
+<!-- Categorie menu (rechts) -->
+<ul class="menu right" id="menu2">
+  <li><a href="1-Ulusal.html">📺 Ulusal</a></li>
+  <li><a href="2-Haber.html">🎬 Haber</a></li>
+  <li><a href="3-Spor.html">⚽ Sport</a></li>
+  <li><a href="4-Belgesel.html">👨‍👩‍👧 Belgesel</a></li>
+  <li><a href="5-Muzik.html">👀 Muzik</a></li>
+  <li><a href="6-Film.html">👉🏻 Film</a></li>
+  <li><a href="7-Cocuk.html">👨‍👩‍👧 Çocuk</a></li>
+</ul>
+
+  <!-- Video player -->
+  <div class="container">
+    <video id="player" controls autoplay></video>
+  </div>
+
+  <!-- HLS.js -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const video = document.getElementById('player');
+    const items = document.querySelectorAll('#menu1 li');
+    const overlay = document.getElementById('overlay');
+
+    function playStream(url) {
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+      }
+    }
+
+    // Eerste stream laden
+    playStream(items[0].dataset.stream);
+
+    items.forEach(item => {
+      item.addEventListener('click', () => {
+        playStream(item.dataset.stream);
+        closeMenus();
+      });
+    });
+
+    function toggleMenu(id) {
+      closeMenus();
+      document.getElementById(id).classList.add('active');
+      overlay.classList.add('active');
+    }
+
+    function closeMenus() {
+      document.querySelectorAll('.menu').forEach(m => m.classList.remove('active'));
+      overlay.classList.remove('active');
+    }
+  </script>
+</body>
+</html>
