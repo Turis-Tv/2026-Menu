@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Catalogus</title>
+    
+    <!-- Google Fonts voor een modern lettertype -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome voor iconen -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    
+    <!-- HLS.js voor m3u8 streaming -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+    <style>
+        /* --- ALGEMENE STIJLEN & RESET --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #141414;
+            color: #f1f1f1;
+            line-height: 1.6;
+        }
+
+        /* --- DYNAMISCHE ACHTERGROND --- */
+        #dynamic-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            filter: blur(25px) brightness(0.3);
+            transform: scale(1.1);
+            transition: background-image 0.7s ease-in-out;
+        }
+
+        /* --- CONTAINER & HEADER --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #222;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #e50914;
+            margin-bottom: 10px;
+        }
+
+        .search-container {
+            position: relative;
+            min-width: 250px;
+        }
+
+        #search-input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border-radius: 25px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        #search-input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+            border-color: #e50914;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+
+        /* --- FILMRASTER (GRID) --- */
+        #movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+        
+        .movie-card {
+            background-color: #222;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .movie-info {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .movie-info h3 {
+            font-size: 0.80rem;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* --- PLAY BUTTON OVERLAY --- */
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(229, 9, 20, 0.9);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .movie-card:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .play-overlay i {
+            color: white;
+            font-size: 24px;
+            margin-left: 3px;
+        }
+
+        /* --- MODAL VOOR VIDEO --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.95);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            margin: 2% auto;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 10px;
+            top: -40px;
+            color: #f1f1f1;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #e50914;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            background: #000;
+            border-radius: 8px;
+        }
+
+        .video-container video,
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .movie-title-modal {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .external-link-btn {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 12px 30px;
+            background: #e50914;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            display: block;
+            width: fit-content;
+        }
+
+        .external-link-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(229, 9, 20, 0.4);
+        }
+
+        /* --- FULLSCREEN KNOP --- */
+        .fullscreen-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(229, 9, 20, 0.9);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 1002;
+            transition: background 0.3s, opacity 0.3s;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(229, 9, 20, 1);
+        }
+
+        .fullscreen-btn.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* --- LANDSCAPE FULLSCREEN STYLES --- */
+        @media screen and (orientation: landscape) and (max-width: 900px) {
+            .modal.landscape-fullscreen {
+                background: #000;
+            }
+            
+            .modal.landscape-fullscreen .modal-content {
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                max-width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .modal.landscape-fullscreen .video-container {
+                padding-bottom: 0;
+                height: 100vh;
+                width: 100vw;
+                border-radius: 0;
+            }
+            
+            .modal.landscape-fullscreen .movie-title-modal {
+                display: none;
+            }
+            
+            .modal.landscape-fullscreen .close-modal {
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                z-index: 9999;
+                background: rgba(0, 0, 0, 0.7);
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 25px;
+            }
+            
+            .modal.landscape-fullscreen .fullscreen-btn {
+                display: none;
+            }
+        }
+
+        /* --- PORTRAIT MOBILE STYLES --- */
+        @media screen and (orientation: portrait) and (max-width: 600px) {
+            .modal.mobile-view .modal-content {
+                margin: 5% auto;
+                width: 100%;
+            }
+            
+            .modal.mobile-view .video-container {
+                padding-bottom: 56.25%;
+            }
+        }
+
+        /* --- MEDIA QUERIES --- */
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+                margin-bottom: 20px;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            #movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 15px;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+
+            .movie-title-modal {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* --- ORIENTATION HINT --- */
+        .rotate-hint {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 10000;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .rotate-hint i {
+            font-size: 40px;
+            margin-bottom: 10px;
+            animation: rotate 2s infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamische achtergrond -->
+    <div id="dynamic-background"></div>
+
+    <!-- Rotate Hint -->
+    <div id="rotateHint" class="rotate-hint">
+        <i class="fas fa-mobile-alt"></i>
+        <p>Draai je telefoon voor volledig scherm</p>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">×</span>
+            <h2 class="movie-title-modal" id="modalMovieTitle"></h2>
+            <div class="video-container" id="videoContainer">
+                <!-- Video element wordt hier dynamisch ingevoegd -->
+            </div>
+            <button class="fullscreen-btn" id="fullscreenBtn">
+                <i class="fas fa-expand"></i>
+            </button>
+            <a href="#" id="externalLink" class="external-link-btn" target="_blank" style="display:none;">
+                <i class="fas fa-external-link-alt"></i> Open in nieuwe tab
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+       
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" placeholder=" Film Ara...">
+            </div>
+        </header>
+
+        <main>
+            <section id="movie-grid">
+                
+                <!-- FILM 1 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 1" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/U5_TKDV4n3ZwibpwxfUwdTTJ"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 1</h3>
+                    </div>
+                </div>
+
+
+                <!-- FILM 2 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 2" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/BpdagJfNspLkTKWCR_7MXgrm"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 2</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 3 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 3" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/FWbdp8u720Glwq8nrkXolW2f"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 3</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 4 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 4" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/Ebkl2N0e64pV3xnqlr6ltumO"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 4</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 5 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 5" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/DyMrZPRh6K10oViDx94ykx4k"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 5</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 6 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 6" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/QUqb_nWG4_he5lVaFt6Lj0zo"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 6</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 7 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 7" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/h4l_MSiyIcGdDp8yfgw6YyNK"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 7</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 8 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 8" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/dXqXG5rnHdviBNB8n8QGSIs8"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 8</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 9 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 9" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/8JHNWa9CboXojlf4wxkWXVyd"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 9</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 10 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 10" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/LOBR9m7TJvuM5srwPijXaLfx"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 10</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 11 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 11" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/3BhXtPEcXdoQAWEGJo1JrbGU"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 11</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 12 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 12" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/nxBdMLSa_hzV9paEhWqtZlKp"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 12</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 13 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 13" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/bBzRYslyBJ1WudC55vV0WzF1"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 13</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 14 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 14" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/ua2IljRKJJe_CEtu1Atbee5g"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 14</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 15 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 15" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/xD5FPlM64NSADeS1zQYKRfDt"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 15</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 16 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 16" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/9fn4Zx3HGdbvRv30wLYTu5yq"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 16</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 17 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 17" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/m2AOxXJ0DX2FAPkxC_gdyc9A"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 17</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 18 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 18" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/i3uXqXOVF4jKttDZDr5pbBMt"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 18</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 19 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 19" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/8gZeZMDJOTPTB2DTvg4Wvvb1"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 19</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 20 - Met externe player (iframe) -->
+                <div class="movie-card" 
+                     data-title="Bölüm 20" 
+                     data-bg-image="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg"
+                     data-video-url="https://dcdl50eadec6df95.xyz/player/gGb4l0rOButzQnBP6GFfdHIR"
+                     data-video-type="iframe">
+                    <img src="https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg" alt="Gassal Bölüm 1 Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Bölüm 20</h3>
+                    </div>
+                </div>
+
+                <!-- FILM 2 - Met externe link -->
+                <div class="movie-card" 
+                     data-title="Zeynep Şimşek" 
+                     data-bg-image="https://img.youtube.com/vi/JjTeViaVdoI/default.jpg"
+                     data-video-url="https://www.youtube.com/watch?v=JjTeViaVdoI"
+                     data-video-type="link">
+                    <img src="https://img.youtube.com/vi/JjTeViaVdoI/default.jpg" alt="The Dark Knight Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Evlerinin Önü Yoldur Yolaktır </h3>
+                    </div>
+                </div>
+                
+                <!-- FILM 3 - Met YouTube embed -->
+                <div class="movie-card" 
+                     data-title="Zeynep Şimşek" 
+                     data-bg-image="https://img.youtube.com/vi/qaxtyajdjmc/mqdefault.jpg"
+                     data-video-url="https://www.youtube.com/embed/c1h68yMxb3I"
+                     data-video-type="iframe">
+                    <img src="https://img.youtube.com/vi/qaxtyajdjmc/mqdefault.jpg" alt="Interstellar Poster">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="movie-info">
+                        <h3>Makaram Sarı</h3>
+                    </div>
+                </div>
+
+  
+                
+     
+ 
+                
+      
+ 
+                
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('search-input');
+            const movieCards = document.querySelectorAll('.movie-card');
+            const dynamicBackground = document.getElementById('dynamic-background');
+            const modal = document.getElementById('videoModal');
+            const closeModal = document.querySelector('.close-modal');
+            const videoContainer = document.getElementById('videoContainer');
+            const modalMovieTitle = document.getElementById('modalMovieTitle');
+            const externalLink = document.getElementById('externalLink');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const rotateHint = document.getElementById('rotateHint');
+            
+            let currentVideoElement = null;
+            let isVideoPlaying = false;
+            let fullscreenBtnTimeout = null;
+            
+            // Zet standaard achtergrond
+            const firstMovieImage = movieCards[0].dataset.bgImage;
+            if (firstMovieImage) {
+                dynamicBackground.style.backgroundImage = `url('${firstMovieImage}')`;
+            }
+
+            // Detecteer apparaat type
+            function isMobileDevice() {
+                return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            }
+
+            // Oriëntatie detectie
+            function handleOrientation() {
+                if (!isVideoPlaying) return;
+                
+                const orientation = window.orientation || screen.orientation?.angle || 0;
+                const isLandscape = Math.abs(orientation) === 90;
+                
+                if (isMobileDevice()) {
+                    if (isLandscape) {
+                        // Automatisch fullscreen in landscape
+                        modal.classList.add('landscape-fullscreen');
+                        enterFullscreen();
+                        rotateHint.style.display = 'none';
+                        
+                        // Verberg fullscreen button na 3 seconden
+                        fullscreenBtn.classList.remove('hidden');
+                        clearTimeout(fullscreenBtnTimeout);
+                        fullscreenBtnTimeout = setTimeout(() => {
+                            fullscreenBtn.classList.add('hidden');
+                        }, 3000);
+                    } else {
+                        // Portrait modus
+                        modal.classList.remove('landscape-fullscreen');
+                        modal.classList.add('mobile-view');
+                        
+                        // Toon fullscreen button weer
+                        fullscreenBtn.classList.remove('hidden');
+                        clearTimeout(fullscreenBtnTimeout);
+                        
+                        // Toon hint om te draaien
+                        if (isVideoPlaying) {
+                            rotateHint.style.display = 'block';
+                            setTimeout(() => {
+                                rotateHint.style.display = 'none';
+                            }, 3000);
+                        }
+                    }
+                }
+            }
+
+            // Toon fullscreen button bij mouse beweging (desktop) of touch (mobile)
+            function showFullscreenBtn() {
+                if (isVideoPlaying) {
+                    fullscreenBtn.classList.remove('hidden');
+                    clearTimeout(fullscreenBtnTimeout);
+                    
+                    // Verberg weer na 3 seconden als in landscape
+                    const orientation = window.orientation || screen.orientation?.angle || 0;
+                    const isLandscape = Math.abs(orientation) === 90;
+                    
+                    if (isLandscape && isMobileDevice()) {
+                        fullscreenBtnTimeout = setTimeout(() => {
+                            fullscreenBtn.classList.add('hidden');
+                        }, 3000);
+                    }
+                }
+            }
+
+            // Event listeners voor het tonen van fullscreen button
+            modal.addEventListener('mousemove', showFullscreenBtn);
+            modal.addEventListener('touchstart', showFullscreenBtn);
+
+            // Fullscreen functies
+            function enterFullscreen() {
+                const elem = document.documentElement;
+                
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                } else if (elem.mozRequestFullScreen) {
+                    elem.mozRequestFullScreen();
+                }
+                
+                // Voor iOS
+                if (currentVideoElement && currentVideoElement.tagName === 'VIDEO') {
+                    if (currentVideoElement.webkitEnterFullscreen) {
+                        currentVideoElement.webkitEnterFullscreen();
+                    }
+                }
+            }
+
+            function exitFullscreen() {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                }
+            }
+
+            // Fullscreen button click
+            fullscreenBtn.addEventListener('click', () => {
+                if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                    enterFullscreen();
+                    fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+                } else {
+                    exitFullscreen();
+                    fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+                }
+            });
+
+            // Luister naar oriëntatie veranderingen
+            window.addEventListener('orientationchange', handleOrientation);
+            window.addEventListener('resize', handleOrientation);
+            
+            // Luister naar fullscreen veranderingen
+            document.addEventListener('fullscreenchange', () => {
+                if (!document.fullscreenElement) {
+                    fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+                }
+            });
+
+            // Film kaart klik event
+            movieCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const bgImage = card.dataset.bgImage;
+                    const videoUrl = card.dataset.videoUrl;
+                    const videoType = card.dataset.videoType;
+                    const title = card.dataset.title;
+                    
+                    // Update achtergrond
+                    dynamicBackground.style.backgroundImage = `url('${bgImage}')`;
+                    
+                    // Open video/link
+                    if (videoUrl) {
+                        openVideo(videoUrl, videoType, title);
+                    }
+                });
+
+                // Voorkom dat hover effect verdwijnt bij mouse movement
+                card.addEventListener('mouseenter', () => {
+                    const bgImage = card.dataset.bgImage;
+                    dynamicBackground.style.backgroundImage = `url('${bgImage}')`;
+                });
+            });
+
+            // Functie om video te openen
+            function openVideo(url, type, title) {
+                modalMovieTitle.textContent = title;
+                videoContainer.innerHTML = '';
+                externalLink.style.display = 'none';
+                currentVideoElement = null;
+                isVideoPlaying = true;
+                
+                // Reset modal classes en toon fullscreen button
+                modal.classList.remove('landscape-fullscreen', 'mobile-view');
+                fullscreenBtn.classList.remove('hidden');
+                
+                switch(type) {
+                    case 'mp4':
+                        const videoElement = document.createElement('video');
+                        videoElement.controls = true;
+                        videoElement.autoplay = true;
+                        videoElement.src = url;
+                        videoElement.setAttribute('playsinline', 'true');
+                        videoElement.setAttribute('webkit-playsinline', 'true');
+                        videoContainer.appendChild(videoElement);
+                        currentVideoElement = videoElement;
+                        modal.style.display = 'block';
+                        
+                        // Auto-play voor mobiel
+                        videoElement.play().catch(e => {
+                            console.log('Auto-play werd geblokkeerd:', e);
+                        });
+                        break;
+                        
+                    case 'm3u8':
+                        const video = document.createElement('video');
+                        video.controls = true;
+                        video.autoplay = true;
+                        video.setAttribute('playsinline', 'true');
+                        video.setAttribute('webkit-playsinline', 'true');
+                        videoContainer.appendChild(video);
+                        currentVideoElement = video;
+                        
+                        if (Hls.isSupported()) {
+                            const hls = new Hls();
+                            hls.loadSource(url);
+                            hls.attachMedia(video);
+                            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                video.play().catch(e => {
+                                    console.log('Auto-play werd geblokkeerd:', e);
+                                });
+                            });
+                        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                            video.src = url;
+                            video.addEventListener('loadedmetadata', function() {
+                                video.play().catch(e => {
+                                    console.log('Auto-play werd geblokkeerd:', e);
+                                });
+                            });
+                        }
+                        modal.style.display = 'block';
+                        break;
+                        
+                    case 'iframe':
+                        const iframe = document.createElement('iframe');
+                        iframe.src = url;
+                        iframe.frameBorder = '0';
+                        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+                        iframe.allowFullscreen = true;
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        iframe.setAttribute('webkitallowfullscreen', 'true');
+                        iframe.setAttribute('mozallowfullscreen', 'true');
+                        videoContainer.appendChild(iframe);
+                        currentVideoElement = iframe;
+                        modal.style.display = 'block';
+                        break;
+                        
+                    case 'link':
+                        window.open(url, '_blank');
+                        isVideoPlaying = false;
+                        break;
+                        
+                    default:
+                        externalLink.href = url;
+                        externalLink.style.display = 'block';
+                        modal.style.display = 'block';
+                }
+                
+                // Check oriëntatie bij openen
+                handleOrientation();
+            }
+
+            // Sluit modal
+            closeModal.onclick = function() {
+                modal.style.display = 'none';
+                videoContainer.innerHTML = '';
+                isVideoPlaying = false;
+                currentVideoElement = null;
+                rotateHint.style.display = 'none';
+                modal.classList.remove('landscape-fullscreen', 'mobile-view');
+                fullscreenBtn.classList.remove('hidden');
+                clearTimeout(fullscreenBtnTimeout);
+                
+                // Exit fullscreen als actief
+                if (document.fullscreenElement || document.webkitFullscreenElement) {
+                    exitFullscreen();
+                }
+            }
+
+            // Sluit modal bij klik buiten content
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                    videoContainer.innerHTML = '';
+                    isVideoPlaying = false;
+                    currentVideoElement = null;
+                    rotateHint.style.display = 'none';
+                    modal.classList.remove('landscape-fullscreen', 'mobile-view');
+                    fullscreenBtn.classList.remove('hidden');
+                    clearTimeout(fullscreenBtnTimeout);
+                    
+                    if (document.fullscreenElement || document.webkitFullscreenElement) {
+                        exitFullscreen();
+                    }
+                }
+            }
+
+            // ESC toets om modal te sluiten
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                    videoContainer.innerHTML = '';
+                    isVideoPlaying = false;
+                    currentVideoElement = null;
+                    rotateHint.style.display = 'none';
+                    modal.classList.remove('landscape-fullscreen', 'mobile-view');
+                    fullscreenBtn.classList.remove('hidden');
+                    clearTimeout(fullscreenBtnTimeout);
+                }
+            });
+
+            // Zoek functionaliteit
+            searchInput.addEventListener('input', (event) => {
+                const searchTerm = event.target.value.toLowerCase();
+
+                movieCards.forEach(card => {
+                    const movieTitle = card.dataset.title.toLowerCase();
+                    
+                    if (movieTitle.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+
+            // iOS specifieke fullscreen voor video elementen
+            if (isMobileDevice()) {
+                document.addEventListener('webkitfullscreenchange', function() {
+                    if (!document.webkitFullscreenElement) {
+                        modal.classList.remove('landscape-fullscreen');
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
