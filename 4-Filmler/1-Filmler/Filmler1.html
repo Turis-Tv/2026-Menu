@@ -526,10 +526,15 @@
             display: flex;
             gap: 10px;
             z-index: 3001;
-            /* NIEUW: Voeg transitie toe voor vloeiend verbergen */
             transition: opacity 0.3s ease;
         }
         
+        /* NIEUWE CLASS VOOR HET VERBERGEN VAN DE CONTROLS */
+        .video-controls.controls-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
         .video-close-btn, .fullscreen-btn {
             background: rgba(227,10,23,0.9);
             border: 2px solid white;
@@ -678,9 +683,6 @@
             display: block;
         }
 
-        /* ================================================= */
-        /* === NIEUWE AANPASSING: CONTROLS VERBERGEN OP MOBIEL === */
-        /* ================================================= */
         @media screen and (orientation: portrait) {
             .video-modal.fullscreen .video-controls {
                 opacity: 0;
@@ -815,7 +817,7 @@
     </div>
 
     <!-- Video Player Modal -->
-    <div class="video-modal" id="videoModal" onclick="closeVideoOnBackground(event)">
+    <div class="video-modal" id="videoModal">
         <div class="video-container" id="videoContainer">
             <div class="video-controls">
                 <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶</button>
@@ -884,6 +886,9 @@
 
         let currentItem = null;
         let isFullscreen = false;
+        
+        // --- NIEUWE VARIABELE VOOR DE TIMER ---
+        let controlsTimeout = null;
 
         function toggleDropdown() { document.getElementById('dropdown').classList.toggle('active'); }
         function closeDropdown() { document.getElementById('dropdown').classList.remove('active'); }
@@ -1032,6 +1037,17 @@
             document.body.style.overflow = 'auto';
         }
         function closeModalOnBackground(event) { if (event.target === document.getElementById('movieModal')) closeModal(); }
+        
+        // --- NIEUWE FUNCTIE OM DE TIMER TE STARTEN/RESETTEN ---
+        function startControlsTimer() {
+            if (controlsTimeout) {
+                clearTimeout(controlsTimeout);
+            }
+            const videoControls = document.querySelector('.video-controls');
+            controlsTimeout = setTimeout(() => {
+                videoControls.classList.add('controls-hidden');
+            }, 5000); // 5 seconden
+        }
 
         function playVideo() {
             if (!currentItem || !currentItem.videoUrl) {
@@ -1041,8 +1057,13 @@
             const videoModal = document.getElementById('videoModal');
             const videoPlayer = document.getElementById('videoPlayer');
             const videoIframe = document.getElementById('videoIframe');
+            const videoControls = document.querySelector('.video-controls');
             
             document.getElementById('videoTitle').textContent = currentItem.title + (currentItem.episodes ? ` - ${currentItem.episodes}` : '');
+            
+            // --- LOGICA TOEGEVOEGD ---
+            // Zorg dat de controls zichtbaar zijn bij start
+            videoControls.classList.remove('controls-hidden');
             
             if (currentItem.videoUrl.includes('.mp4') || currentItem.videoUrl.includes('w3schools')) {
                 videoPlayer.style.display = 'block';
@@ -1056,6 +1077,10 @@
             }
             videoModal.classList.add('active');
             closeModal();
+
+            // --- LOGICA TOEGEVOEGD ---
+            // Start de 5-seconden timer
+            startControlsTimer();
         }
 
         function toggleFullscreen() {
@@ -1077,11 +1102,29 @@
             if (document.fullscreenElement) document.exitFullscreen();
             const videoModal = document.getElementById('videoModal');
             videoModal.classList.remove('active', 'fullscreen');
+            
+            // --- LOGICA TOEGEVOEGD ---
+            // Stop de timer en maak controls weer zichtbaar voor de volgende keer
+            if (controlsTimeout) clearTimeout(controlsTimeout);
+            document.querySelector('.video-controls').classList.remove('controls-hidden');
+
             document.getElementById('videoPlayer').pause();
             document.getElementById('videoPlayer').src = '';
             document.getElementById('videoIframe').src = '';
         }
-        function closeVideoOnBackground(event) { if (event.target === document.getElementById('videoModal')) closeVideo(); }
+        
+        // --- EVENT LISTENER TOEGEVOEGD VOOR HET KLIKKEN OP HET VIDEO GEBIED ---
+        document.getElementById('videoModal').addEventListener('click', (e) => {
+            // Als de controls geklikt worden, doe niks.
+            if (e.target.closest('.video-controls')) {
+                return;
+            }
+            // Anders, toon de controls en reset de timer.
+            const videoControls = document.querySelector('.video-controls');
+            videoControls.classList.remove('controls-hidden');
+            startControlsTimer();
+        });
+
 
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closeVideo(); } });
 
@@ -1089,8 +1132,10 @@
         document.getElementById('videoModal').addEventListener('touchend', (e) => {
             const currentTime = new Date().getTime();
             if (currentTime - lastTap < 300) {
-                if (!e.target.closest('.video-controls')) toggleFullscreen();
-                e.preventDefault();
+                if (!e.target.closest('.video-controls')) {
+                    toggleFullscreen();
+                    e.preventDefault();
+                }
             }
             lastTap = currentTime;
         });
