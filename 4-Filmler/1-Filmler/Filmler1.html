@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Türk Film & Dizi Koleksiyonu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            color: white;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Ottoman Pattern Background - Beautiful Look */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://img.piri.net/mnresize/720/-/resim/upload/2016/04/01/11/29/c808cb77osmanliwallpaerlari13.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            opacity: 0.4;
+            z-index: -3;
+            animation: subtleZoom 20s ease-in-out infinite alternate;
+        }
+
+        /* Animated Turkish Flag Overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(227,10,23,0.7) 0%, 
+                rgba(0,0,0,0.8) 50%,
+                rgba(227,10,23,0.6) 100%);
+            z-index: -2;
+            animation: gradientShift 10s ease-in-out infinite;
+        }
+
+        /* Additional Pattern Overlay for Depth */
+        body {
+            position: relative;
+        }
+
+        body > *:first-child::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(227,10,23,0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(227,10,23,0.1) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes subtleZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
+        }
+        
+        /* Header - Enhanced Design */
+        .header {
+            background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 100%);
+            backdrop-filter: blur(15px);
+            padding: 10px 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(227,10,23,0.3);
+        }
+
+        /* Left Category Navigation */
+        .category-nav {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .category-btn {
+            padding: 8px 12px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 11px;
+            backdrop-filter: blur(5px);
+        }
+
+        .category-btn:hover, .category-btn:active {
+            background: linear-gradient(135deg, rgba(227,10,23,0.8), rgba(227,10,23,0.6));
+            border-color: #E30A17;
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(227,10,23,0.5);
+        }
+
+        .category-btn.active {
+            background: linear-gradient(135deg, #E30A17, #B5000D);
+            border-color: #E30A17;
+            box-shadow: 0 4px 20px rgba(227,10,23,0.6);
+        }
+        
+        .header h1 {
+            text-align: center;
+            font-size: 1.2em;
+            background: linear-gradient(45deg, #E30A17, #FFD700, #FFFFFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(227,10,23,0.5);
+            flex: 1;
+            margin: 0 10px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        /* Dropdown Menu - Right Side */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-btn {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .dropdown-btn:hover, .dropdown-btn:active {
+            background: linear-gradient(135deg, rgba(227,10,23,0.8), rgba(227,10,23,0.6));
+            border-color: #E30A17;
+            box-shadow: 0 4px 15px rgba(227,10,23,0.5);
+        }
+
+        .dropdown-arrow {
+            font-size: 10px;
+            transition: transform 0.3s;
+        }
+
+        .dropdown.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            margin-top: 10px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.98), rgba(227,10,23,0.2));
+            border: 2px solid #E30A17;
+            border-radius: 15px;
+            padding: 10px;
+            min-width: 200px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            z-index: 1001;
+            backdrop-filter: blur(20px);
+        }
+
+        .dropdown.active .dropdown-content {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 10px 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            margin: 5px 0;
+            transition: all 0.3s;
+            font-size: 14px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .dropdown-item:hover, .dropdown-item:active {
+            background: linear-gradient(135deg, #E30A17, #B5000D);
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(227,10,23,0.5);
+        }
+
+        /* Search & Filter - Enhanced */
+        .controls {
+            max-width: 100%;
+            margin: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-box::placeholder {
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: #E30A17;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(227,10,23,0.1));
+            box-shadow: 0 4px 15px rgba(227,10,23,0.4);
+        }
+
+        /* Section Title - Enhanced */
+        .section-title {
+            margin: 20px 15px;
+            font-size: 1.8em;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8), 0 0 20px rgba(227,10,23,0.5);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #E30A17, transparent);
+        }
+        
+        /* Movies Grid - Mobile Optimized */
+        .movies-container {
+            padding: 0 10px 20px;
+        }
+        
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 12px;
+            padding: 10px 0;
+        }
+        
+        /* Movie Card - Enhanced Design */
+        .movie-card {
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(227,10,23,0.2));
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.7);
+            border: 2px solid transparent;
+            backdrop-filter: blur(5px);
+        }
+        
+        .movie-card:active {
+            transform: scale(0.95);
+            border-color: #E30A17;
+            box-shadow: 0 0 20px rgba(227,10,23,0.8);
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+            border-color: #E30A17;
+            box-shadow: 0 10px 30px rgba(227,10,23,0.6);
+        }
+        
+        .movie-poster {
+            width: 100%;
+            height: 165px;
+            object-fit: cover;
+            background: linear-gradient(45deg, #333, #666);
+        }
+        
+        .movie-info {
+            padding: 8px;
+            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.95));
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .movie-title {
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 3px;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+        
+        .movie-year {
+            font-size: 0.75em;
+            color: #FFD700;
+            margin-bottom: 3px;
+        }
+
+        .series-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: linear-gradient(135deg, #E30A17, #B5000D);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.65em;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+        
+        /* Play Button Overlay - Enhanced */
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(227,10,23,0.95), rgba(227,10,23,0.7));
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(227,10,23,0.8);
+        }
+        
+        .movie-card:hover .play-overlay {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-left: 18px solid white;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            margin-left: 3px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+        
+        /* Video Player Modal - UPDATED FOR IFRAME */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.98);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .video-modal.active {
+            display: flex;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            border: 2px solid #E30A17;
+        }
+        
+        .video-player {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            display: block;
+        }
+
+        .video-iframe {
+            width: 100%;
+            height: 70vh;
+            border: none;
+            display: block;
+        }
+        
+        .video-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+            z-index: 3001;
+        }
+        
+        .video-close-btn {
+            background: rgba(227,10,23,0.9);
+            border: 2px solid white;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .video-close-btn:hover {
+            background: #FF1420;
+            transform: rotate(90deg);
+        }
+        
+        .video-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.9));
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        /* Modal - Enhanced Design */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.97);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, rgba(0,0,0,0.95), rgba(227,10,23,0.3));
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.8);
+            border: 2px solid #E30A17;
+            backdrop-filter: blur(20px);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+            border: 2px solid rgba(255,255,255,0.5);
+            color: white;
+            font-size: 24px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 2001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-modal:active {
+            background: linear-gradient(135deg, #E30A17, #B5000D);
+            transform: scale(0.9) rotate(90deg);
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-right: 30px;
+        }
+        
+        .modal-title {
+            font-size: 1.5em;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        
+        .play-button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #E30A17, #8B0000);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px auto;
+            display: block;
+            box-shadow: 0 5px 20px rgba(227,10,23,0.5);
+        }
+        
+        .play-button:hover {
+            background: linear-gradient(135deg, #FF1420, #E30A17);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(227,10,23,0.7);
+        }
+
+        /* Hide sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Mobile Specific Optimizations */
+        @media (max-width: 768px) {
+            .header h1 {
+                display: none;
+            }
+
+            .category-nav {
+                flex: 1;
+            }
+
+            .movies-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .section-title {
+                font-size: 1.5em;
+            }
+
+            .video-iframe {
+                height: 50vh;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .movies-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .section-title {
+                font-size: 1.3em;
+            }
+        }
+
+        /* Prevent text selection on mobile */
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        input {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="category-nav">
+            <button class="category-btn active" onclick="showCategory('filmler')">🎬 FİLMLER</button>
+            <button class="category-btn" onclick="showCategory('diziler')">📺 DİZİLER</button>
+        </div>
+        <h1>🇹🇷 TÜRKİYE</h1>
+        <div class="dropdown" id="dropdown">
+            <button class="dropdown-btn" onclick="toggleDropdown()">
+                MENÜ <span class="dropdown-arrow">▼</span>
+            </button>
+            <div class="dropdown-content">
+                <a href="#" class="dropdown-item" onclick="showCategory('filmler'); closeDropdown()">🎬 Filmler</a>
+                <a href="#" class="dropdown-item" onclick="showCategory('diziler'); closeDropdown()">📺 Diziler</a>
+                <a href="#" class="dropdown-item" onclick="filterByGenre('action')">⚔️ Aksiyon</a>
+                <a href="#" class="dropdown-item" onclick="filterByGenre('comedy')">😂 Komedi</a>
+                <a href="#" class="dropdown-item" onclick="filterByGenre('drama')">🎭 Drama</a>
+                <a href="#" class="dropdown-item" onclick="filterByGenre('romance')">❤️ Romantik</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FILMLER Section -->
+    <div id="filmlerSection" class="content-section active">
+        <!-- Controls -->
+        <div class="controls">
+            <input type="text" class="search-box" placeholder="🔍 Film ara..." id="searchFilms">
+        </div>
+
+        <div class="section-title">🎬 FİLMLER</div>
+
+        <!-- Movies Container -->
+        <div class="movies-container">
+            <div class="movies-grid" id="filmsGrid">
+                <!-- Films will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- DIZILER Section -->
+    <div id="dizilerSection" class="content-section">
+        <!-- Controls -->
+        <div class="controls">
+            <input type="text" class="search-box" placeholder="🔍 Dizi ara..." id="searchSeries">
+        </div>
+
+        <div class="section-title">📺 DİZİLER</div>
+
+        <!-- Series Container -->
+        <div class="movies-container">
+            <div class="movies-grid" id="seriesGrid">
+                <!-- Series will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Movie Modal -->
+    <div class="modal" id="movieModal" onclick="closeModalOnBackground(event)">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">×</button>
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Film/Dizi Adı</h2>
+            </div>
+            <button class="play-button" onclick="playVideo()">▶ FİLMİ OYNAT</button>
+            <div id="modalInfo" style="font-size: 13px; line-height: 1.6; margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <!-- Video Player Modal - SUPPORTS BOTH VIDEO AND IFRAME -->
+    <div class="video-modal" id="videoModal" onclick="closeVideoOnBackground(event)">
+        <div class="video-container">
+            <div class="video-controls">
+                <button class="video-close-btn" onclick="closeVideo()">×</button>
+            </div>
+            <!-- Video Element for MP4 -->
+            <video id="videoPlayer" class="video-player" controls autoplay style="display: none;">
+                <source src="" type="video/mp4">
+                Tarayıcınız video oynatmayı desteklemiyor.
+            </video>
+            <!-- Iframe for Streaming Links -->
+            <iframe id="videoIframe" class="video-iframe" style="display: none;" allowfullscreen></iframe>
+            <div class="video-title" id="videoTitle"></div>
+        </div>
+    </div>
+
+    <script>
+        // Turkish Films Database - VIDEO LİNKLERİ İLE
+        const turkishFilms = [
+            {
+                id: 1,
+                title: "Ayla",
+                year: "2017",
+                poster: "https://upload.wikimedia.org/wikipedia/tr/f/fc/Ayla_film_afi%C5%9Fi.jpg",
+                genre: "drama",
+                description: "Kore Savaşı'nda gerçek bir hikaye.",
+                type: "film",
+                videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4"  // MP4 örnek
+            },
+            {
+                id: 2,
+                title: "Müslüm",
+                year: "2018",
+                poster: "https://upload.wikimedia.org/wikipedia/tr/d/dd/M%C3%BCsl%C3%BCm_film_posteri.jpg",
+                genre: "drama",
+                description: "Müslüm Gürses'in hayatı.",
+                type: "film",
+                videoUrl: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4"  // MP4 örnek
+            },
+            {
+                id: 3,
+                title: "Recep İvedik 7",
+                year: "2022",
+                poster: "https://upload.wikimedia.org/wikipedia/tr/7/7c/Recep_%C4%B0vedik_7_afi%C5%9F.jpg",
+                genre: "comedy",
+                description: "Recep'in yeni maceraları.",
+                type: "film",
+                videoUrl: ""
+            },
+            {
+                id: 4,
+                title: "Dağ 2",
+                year: "2016",
+                poster: "https://upload.wikimedia.org/wikipedia/tr/0/0e/Da%C4%9F_II_poster.jpg",
+                genre: "action",
+                description: "Askeri operasyon filmi.",
+                type: "film",
+                videoUrl: ""
+            },
+            {
+                id: 5,
+                title: "7. Koğuştaki Mucize",
+                year: "2019",
+                poster: "https://upload.wikimedia.org/wikipedia/tr/f/f9/7._Ko%C4%9Fu%C5%9Ftaki_Mucize.jpg",
+                genre: "drama",
+                description: "Baba kız dramı.",
+                type: "film",
+                videoUrl: ""
+            },
+            {
+                id: 6,
+                title: "Babam ve Oğlum",
+                year: "2005",
+                poster: "https://upload.wikimedia.org/wikipedia/tr/c/c7/Babamveoglum.jpg",
+                genre: "drama",
+                description: "Duygusal aile filmi.",
+                type: "film",
+                videoUrl: ""
+            },
+            {
+                id: 7,
+                title: "Fetih 1453",
+                year: "2012",
+                poster: "https://upload.wikimedia.org/wikipedia/tr/a/a2/Fetih_1453_poster.jpg",
+                genre: "action",
+                description: "İstanbul'un fethi.",
+                type: "film",
+                videoUrl: ""
+            },
+            {
+                id: 8,
+                title: "Bizim İçin Şampiyon",
+                year: "2018",
+                poster: "https://tr.web.img3.acsta.net/pictures/18/11/28/15/28/2708625.jpg",
+                genre: "drama",
+                description: "At yarışı dramı.",
+                type: "film",
+                videoUrl: ""
+            },
+            {
+                id: 9,
+                title: "Organize İşler",
+                year: "2005",
+                poster: "https://upload.wikimedia.org/wikipedia/tr/e/ef/Organize_isler_poster.jpg",
+                genre: "comedy",
+                description: "Komedi suç filmi.",
+                type: "film",
+                videoUrl: ""
+            },
+            {
+                id: 10,
+                title: "Kelebeğin Rüyası",
+                year: "2013",
+                poster: "https://upload.wikimedia.org/wikipedia/tr/5/59/Kelebe%C4%9Fin_R%C3%BCyas%C4%B1_poster.jpg",
+                genre: "romance",
+                description: "Şairlerin aşkı.",
+                type: "film",
+                videoUrl: ""
+            }
+        ];
+
+        // Turkish Series Database - VIDEO LİNKLERİ İLE
+        const turkishSeries = [
+            {
+                id: 101,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Mahalle ve aile dizisi.",
+                episodes: "1 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/U5_TKDV4n3ZwibpwxfUwdTTJ"  // IFRAME link
+            },
+            {
+                id: 102,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "İntikam hikayesi.",
+                episodes: "2 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/BpdagJfNspLkTKWCR_7MXgrm"
+            },
+            {
+                id: 103,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "drama",
+                description: "Mafya dizisi.",
+                episodes: "3 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/FWbdp8u720Glwq8nrkXolW2f"
+            },
+            {
+                id: 104,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "drama",
+                description: "Osmanlı dizisi.",
+                episodes: "4 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/Ebkl2N0e64pV3xnqlr6ltumO"
+            },
+            {
+                id: 105,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "5 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/DyMrZPRh6K10oViDx94ykx4k"
+            },
+            {
+                id: 106,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "6 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/QUqb_nWG4_he5lVaFt6Lj0zo"
+            },
+            {
+                id: 107,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "7 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/h4l_MSiyIcGdDp8yfgw6YyNK"
+            },
+            {
+                id: 108,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "8 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/dXqXG5rnHdviBNB8n8QGSIs8"
+            },
+            {
+                id: 109,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "9 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/8JHNWa9CboXojlf4wxkWXVyd"
+            },
+            {
+                id: 110,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "10 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/LOBR9m7TJvuM5srwPijXaLfx"
+            },
+            {
+                id: 111,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "11 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/3BhXtPEcXdoQAWEGJo1JrbGU"
+            },
+            {
+                id: 112,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "12 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/nxBdMLSa_hzV9paEhWqtZlKp"
+            },
+            {
+                id: 113,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "13 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/bBzRYslyBJ1WudC55vV0WzF1"
+            },
+            {
+                id: 114,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "14 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/ua2IljRKJJe_CEtu1Atbee5g"
+            },
+            {
+                id: 115,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "15 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/xD5FPlM64NSADeS1zQYKRfDt"
+            },
+            {
+                id: 116,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "16 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/9fn4Zx3HGdbvRv30wLYTu5yq"
+            },
+            {
+                id: 117,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "17 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/m2AOxXJ0DX2FAPkxC_gdyc9A"
+            },
+            {
+                id: 118,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "18 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/i3uXqXOVF4jKttDZDr5pbBMt"
+            },
+            {
+                id: 119,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "action",
+                description: "Tarihi dizi.",
+                episodes: "19 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/8gZeZMDJOTPTB2DTvg4Wvvb1"
+            },
+            {
+                id: 120,
+                title: "Gassal",
+                year: "2025",
+                poster: "https://dizi20.life/assets/images/95939754cab5b95f7178d3befb422ce0_thumb.jpg",
+                genre: "drama",
+                description: "Polisiye dizi.",
+                episodes: "20 Bölüm",
+                type: "series",
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/gGb4l0rOButzQnBP6GFfdHIR"
+            }
+        ];
+
+        // Current selected movie/series
+        let currentItem = null;
+
+        // Dropdown functions
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        function closeDropdown() {
+            const dropdown = document.getElementById('dropdown');
+            dropdown.classList.remove('active');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdown');
+            if (!dropdown.contains(event.target)) {
+                closeDropdown();
+            }
+        });
+
+        // Category switching
+        function showCategory(category) {
+            // Update button states
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Find and activate the correct button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if (btn.textContent.includes(category === 'filmler' ? 'FİLMLER' : 'DİZİLER')) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Show/hide sections
+            if (category === 'filmler') {
+                document.getElementById('filmlerSection').classList.add('active');
+                document.getElementById('dizilerSection').classList.remove('active');
+                displayMovies(turkishFilms, 'filmsGrid');
+            } else {
+                document.getElementById('dizilerSection').classList.add('active');
+                document.getElementById('filmlerSection').classList.remove('active');
+                displayMovies(turkishSeries, 'seriesGrid');
+            }
+            
+            closeDropdown();
+        }
+
+        // Filter by genre across both sections
+        function filterByGenre(genre) {
+            const activeSection = document.querySelector('.content-section.active');
+            if (activeSection.id === 'filmlerSection') {
+                filterMovies(genre, 'film');
+            } else {
+                filterMovies(genre, 'series');
+            }
+            closeDropdown();
+        }
+
+        // Load content on page load
+        window.addEventListener('load', () => {
+            displayMovies(turkishFilms, 'filmsGrid');
+            displayMovies(turkishSeries, 'seriesGrid');
+        });
+
+        // Display movies/series function
+        function displayMovies(items, gridId) {
+            const grid = document.getElementById(gridId);
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            if (items.length === 0) {
+                grid.innerHTML = '<div class="loading">İçerik bulunamadı</div>';
+                return;
+            }
+            
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.onclick = () => openModal(item);
+                
+                const badge = item.type === 'series' ? `<span class="series-badge">DİZİ</span>` : '';
+                const episodes = item.episodes ? `<div style="color: #FFD700; font-size: 0.65em; margin-top: 2px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">${item.episodes}</div>` : '';
+                
+                card.innerHTML = `
+                    <img src="${item.poster}" alt="${item.title}" class="movie-poster" onerror="this.src='https://via.placeholder.com/200x300/E30A17/FFFFFF?text=${encodeURIComponent(item.title)}'">
+                    ${badge}
+                    <div class="play-overlay">
+                        <div class="play-icon"></div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">${item.title}</div>
+                        <div class="movie-year">${item.year}</div>
+                        ${episodes}
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter function
+        function filterMovies(filter, type) {
+            let items = type === 'film' ? turkishFilms : turkishSeries;
+            let gridId = type === 'film' ? 'filmsGrid' : 'seriesGrid';
+            
+            if (filter !== 'all') {
+                items = items.filter(item => item.genre === filter);
+            }
+            
+            displayMovies(items, gridId);
+        }
+
+        // Search functionality
+        document.getElementById('searchFilms').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = turkishFilms.filter(movie => 
+                movie.title.toLowerCase().includes(searchTerm)
+            );
+            displayMovies(filtered, 'filmsGrid');
+        });
+
+        document.getElementById('searchSeries').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = turkishSeries.filter(series => 
+                series.title.toLowerCase().includes(searchTerm)
+            );
+            displayMovies(filtered, 'seriesGrid');
+        });
+
+        // Modal functions
+        function openModal(item) {
+            currentItem = item;
+            const modal = document.getElementById('movieModal');
+            document.getElementById('modalTitle').textContent = item.title;
+            
+            const modalInfo = document.getElementById('modalInfo');
+            const typeText = item.type === 'series' ? 'Dizi' : 'Film';
+            const episodesInfo = item.episodes ? `<p><strong>Bölümler:</strong> ${item.episodes}</p>` : '';
+            
+            modalInfo.innerHTML = `
+                <p><strong>Tür:</strong> ${typeText}</p>
+                <p><strong>Yıl:</strong> ${item.year}</p>
+                <p><strong>Kategori:</strong> ${item.genre}</p>
+                ${episodesInfo}
+                <p><strong>Açıklama:</strong> ${item.description}</p>
+            `;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('movieModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function closeModalOnBackground(event) {
+            if (event.target === document.getElementById('movieModal')) {
+                closeModal();
+            }
+        }
+
+        // Video Player Functions - UPDATED TO SUPPORT BOTH VIDEO AND IFRAME
+        function playVideo() {
+            if (currentItem && currentItem.videoUrl) {
+                const videoModal = document.getElementById('videoModal');
+                const videoPlayer = document.getElementById('videoPlayer');
+                const videoIframe = document.getElementById('videoIframe');
+                const videoTitle = document.getElementById('videoTitle');
+                
+                videoTitle.textContent = currentItem.title;
+                
+                // Check if it's a direct video file (mp4, etc.) or an iframe link
+                if (currentItem.videoUrl.includes('.mp4') || 
+                    currentItem.videoUrl.includes('.webm') || 
+                    currentItem.videoUrl.includes('.ogg') ||
+                    currentItem.videoUrl.includes('sample-videos.com') ||
+                    currentItem.videoUrl.includes('w3schools.com')) {
+                    // It's a direct video file
+                    videoPlayer.style.display = 'block';
+                    videoIframe.style.display = 'none';
+                    videoPlayer.src = currentItem.videoUrl;
+                    
+                    videoModal.classList.add('active');
+                    closeModal();
+                    
+                    videoPlayer.play().catch(e => {
+                        console.log('Otomatik oynatma engellenmiş olabilir:', e);
+                    });
+                } else {
+                    // It's an iframe link (like your streaming link)
+                    videoPlayer.style.display = 'none';
+                    videoIframe.style.display = 'block';
+                    videoIframe.src = currentItem.videoUrl;
+                    
+                    videoModal.classList.add('active');
+                    closeModal();
+                }
+            } else {
+                alert('Bu içerik için video linki henüz eklenmemiş!\n\nLütfen JavaScript kodunda videoUrl alanına link ekleyin.');
+            }
+        }
+
+        function closeVideo() {
+            const videoModal = document.getElementById('videoModal');
+            const videoPlayer = document.getElementById('videoPlayer');
+            const videoIframe = document.getElementById('videoIframe');
+            
+            // Clean up video player
+            videoPlayer.pause();
+            videoPlayer.src = '';
+            videoPlayer.style.display = 'none';
+            
+            // Clean up iframe
+            videoIframe.src = '';
+            videoIframe.style.display = 'none';
+            
+            videoModal.classList.remove('active');
+        }
+
+        function closeVideoOnBackground(event) {
+            if (event.target === document.getElementById('videoModal')) {
+                closeVideo();
+            }
+        }
+
+        // ESC key to close modals
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeVideo();
+            }
+        });
+
+        // Initialize
+        console.log('Türk Film & Dizi Modülü Yüklendi 🇹🇷');
+        console.log('Hem MP4 hem de iframe linkleri destekleniyor!');
+    </script>
+</body>
+</html>
