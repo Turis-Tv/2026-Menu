@@ -405,7 +405,7 @@
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
         }
         
-        /* Video Player Modal - UPDATED FOR IFRAME */
+        /* Video Player Modal - UPDATED WITH FULLSCREEN & ORIENTATION SUPPORT */
         .video-modal {
             display: none;
             position: fixed;
@@ -433,6 +433,22 @@
             overflow: hidden;
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             border: 2px solid #E30A17;
+            transition: border-color 0.3s;
+        }
+
+        /* Portrait orientation - black border */
+        @media screen and (orientation: portrait) {
+            .video-modal.fullscreen .video-container {
+                border-color: #000 !important;
+                border-width: 0;
+            }
+        }
+
+        /* Landscape orientation - keep red border */
+        @media screen and (orientation: landscape) {
+            .video-modal.fullscreen .video-container {
+                border-color: #E30A17;
+            }
         }
         
         .video-player {
@@ -448,6 +464,30 @@
             border: none;
             display: block;
         }
+
+        /* Fullscreen styles */
+        .video-modal.fullscreen {
+            padding: 0;
+        }
+
+        .video-modal.fullscreen .video-container {
+            max-width: 100%;
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+        }
+
+        .video-modal.fullscreen .video-iframe {
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .video-modal.fullscreen .video-player {
+            max-height: 100vh;
+            height: 100vh;
+            width: 100vw;
+            object-fit: contain;
+        }
         
         .video-controls {
             position: absolute;
@@ -458,7 +498,7 @@
             z-index: 3001;
         }
         
-        .video-close-btn {
+        .video-close-btn, .fullscreen-btn {
             background: rgba(227,10,23,0.9);
             border: 2px solid white;
             color: white;
@@ -473,8 +513,12 @@
             transition: all 0.3s;
         }
         
-        .video-close-btn:hover {
+        .video-close-btn:hover, .fullscreen-btn:hover {
             background: #FF1420;
+            transform: scale(1.1);
+        }
+
+        .video-close-btn:hover {
             transform: rotate(90deg);
         }
         
@@ -488,6 +532,11 @@
             color: white;
             font-size: 1.2em;
             font-weight: bold;
+            transition: opacity 0.3s;
+        }
+
+        .video-modal.fullscreen .video-title {
+            opacity: 0;
         }
         
         /* Modal - Enhanced Design */
@@ -618,6 +667,14 @@
             .video-iframe {
                 height: 50vh;
             }
+
+            /* Portrait fullscreen on mobile */
+            @media screen and (orientation: portrait) {
+                .video-modal.fullscreen .video-iframe {
+                    height: 100vh;
+                    width: 100vw;
+                }
+            }
         }
 
         @media (max-width: 480px) {
@@ -644,6 +701,23 @@
             -moz-user-select: text;
             -ms-user-select: text;
             user-select: text;
+        }
+
+        /* Fullscreen API styles */
+        :fullscreen {
+            background: #000;
+        }
+
+        :-webkit-full-screen {
+            background: #000;
+        }
+
+        :-moz-full-screen {
+            background: #000;
+        }
+
+        :-ms-fullscreen {
+            background: #000;
         }
     </style>
 </head>
@@ -716,10 +790,11 @@
         </div>
     </div>
 
-    <!-- Video Player Modal - SUPPORTS BOTH VIDEO AND IFRAME -->
+    <!-- Video Player Modal - WITH FULLSCREEN SUPPORT -->
     <div class="video-modal" id="videoModal" onclick="closeVideoOnBackground(event)">
-        <div class="video-container">
+        <div class="video-container" id="videoContainer">
             <div class="video-controls">
+                <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶</button>
                 <button class="video-close-btn" onclick="closeVideo()">×</button>
             </div>
             <!-- Video Element for MP4 -->
@@ -728,13 +803,13 @@
                 Tarayıcınız video oynatmayı desteklemiyor.
             </video>
             <!-- Iframe for Streaming Links -->
-            <iframe id="videoIframe" class="video-iframe" style="display: none;" allowfullscreen></iframe>
+            <iframe id="videoIframe" class="video-iframe" style="display: none;" allowfullscreen allow="fullscreen"></iframe>
             <div class="video-title" id="videoTitle"></div>
         </div>
     </div>
 
     <script>
-        // Turkish Films Database - VIDEO LİNKLERİ İLE
+        // Turkish Films Database
         const turkishFilms = [
             {
                 id: 1,
@@ -744,7 +819,7 @@
                 genre: "drama",
                 description: "Kore Savaşı'nda gerçek bir hikaye.",
                 type: "film",
-                videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4"  // MP4 örnek
+                videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4"
             },
             {
                 id: 2,
@@ -754,7 +829,7 @@
                 genre: "drama",
                 description: "Müslüm Gürses'in hayatı.",
                 type: "film",
-                videoUrl: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4"  // MP4 örnek
+                videoUrl: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4"
             },
             {
                 id: 3,
@@ -838,7 +913,7 @@
             }
         ];
 
-        // Turkish Series Database - VIDEO LİNKLERİ İLE
+        // Turkish Series Database
         const turkishSeries = [
             {
                 id: 101,
@@ -849,7 +924,7 @@
                 description: "Mahalle ve aile dizisi.",
                 episodes: "1 Bölüm",
                 type: "series",
-                videoUrl: "https://dcdl50eadec6df95.xyz/player/U5_TKDV4n3ZwibpwxfUwdTTJ"  // IFRAME link
+                videoUrl: "https://dcdl50eadec6df95.xyz/player/U5_TKDV4n3ZwibpwxfUwdTTJ"
             },
             {
                 id: 102,
@@ -1064,6 +1139,7 @@
 
         // Current selected movie/series
         let currentItem = null;
+        let isFullscreen = false;
 
         // Dropdown functions
         function toggleDropdown() {
@@ -1086,19 +1162,16 @@
 
         // Category switching
         function showCategory(category) {
-            // Update button states
             document.querySelectorAll('.category-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            // Find and activate the correct button
             document.querySelectorAll('.category-btn').forEach(btn => {
                 if (btn.textContent.includes(category === 'filmler' ? 'FİLMLER' : 'DİZİLER')) {
                     btn.classList.add('active');
                 }
             });
 
-            // Show/hide sections
             if (category === 'filmler') {
                 document.getElementById('filmlerSection').classList.add('active');
                 document.getElementById('dizilerSection').classList.remove('active');
@@ -1112,7 +1185,7 @@
             closeDropdown();
         }
 
-        // Filter by genre across both sections
+        // Filter by genre
         function filterByGenre(genre) {
             const activeSection = document.querySelector('.content-section.active');
             if (activeSection.id === 'filmlerSection') {
@@ -1228,7 +1301,7 @@
             }
         }
 
-        // Video Player Functions - UPDATED TO SUPPORT BOTH VIDEO AND IFRAME
+        // Video Player Functions with Fullscreen Support
         function playVideo() {
             if (currentItem && currentItem.videoUrl) {
                 const videoModal = document.getElementById('videoModal');
@@ -1238,13 +1311,12 @@
                 
                 videoTitle.textContent = currentItem.title;
                 
-                // Check if it's a direct video file (mp4, etc.) or an iframe link
                 if (currentItem.videoUrl.includes('.mp4') || 
                     currentItem.videoUrl.includes('.webm') || 
                     currentItem.videoUrl.includes('.ogg') ||
                     currentItem.videoUrl.includes('sample-videos.com') ||
                     currentItem.videoUrl.includes('w3schools.com')) {
-                    // It's a direct video file
+                    // Direct video file
                     videoPlayer.style.display = 'block';
                     videoIframe.style.display = 'none';
                     videoPlayer.src = currentItem.videoUrl;
@@ -1256,7 +1328,7 @@
                         console.log('Otomatik oynatma engellenmiş olabilir:', e);
                     });
                 } else {
-                    // It's an iframe link (like your streaming link)
+                    // Iframe link
                     videoPlayer.style.display = 'none';
                     videoIframe.style.display = 'block';
                     videoIframe.src = currentItem.videoUrl;
@@ -1265,7 +1337,56 @@
                     closeModal();
                 }
             } else {
-                alert('Bu içerik için video linki henüz eklenmemiş!\n\nLütfen JavaScript kodunda videoUrl alanına link ekleyin.');
+                alert('Bu içerik için video linki henüz eklenmemiş!');
+            }
+        }
+
+        // Fullscreen toggle function
+        function toggleFullscreen() {
+            const videoModal = document.getElementById('videoModal');
+            const videoContainer = document.getElementById('videoContainer');
+            
+            if (!isFullscreen) {
+                // Enter fullscreen
+                if (videoModal.requestFullscreen) {
+                    videoModal.requestFullscreen();
+                } else if (videoModal.webkitRequestFullscreen) {
+                    videoModal.webkitRequestFullscreen();
+                } else if (videoModal.msRequestFullscreen) {
+                    videoModal.msRequestFullscreen();
+                } else if (videoModal.mozRequestFullScreen) {
+                    videoModal.mozRequestFullScreen();
+                }
+                videoModal.classList.add('fullscreen');
+                isFullscreen = true;
+            } else {
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                }
+                videoModal.classList.remove('fullscreen');
+                isFullscreen = false;
+            }
+        }
+
+        // Listen for fullscreen changes
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+        function handleFullscreenChange() {
+            const videoModal = document.getElementById('videoModal');
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && 
+                !document.mozFullScreenElement && !document.msFullscreenElement) {
+                videoModal.classList.remove('fullscreen');
+                isFullscreen = false;
             }
         }
 
@@ -1273,6 +1394,11 @@
             const videoModal = document.getElementById('videoModal');
             const videoPlayer = document.getElementById('videoPlayer');
             const videoIframe = document.getElementById('videoIframe');
+            
+            // Exit fullscreen if active
+            if (isFullscreen) {
+                toggleFullscreen();
+            }
             
             // Clean up video player
             videoPlayer.pause();
@@ -1284,6 +1410,7 @@
             videoIframe.style.display = 'none';
             
             videoModal.classList.remove('active');
+            videoModal.classList.remove('fullscreen');
         }
 
         function closeVideoOnBackground(event) {
@@ -1300,9 +1427,22 @@
             }
         });
 
+        // Double tap to toggle fullscreen on mobile
+        let lastTap = 0;
+        document.getElementById('videoModal').addEventListener('touchend', function(e) {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            if (tapLength < 500 && tapLength > 0) {
+                if (!e.target.closest('.video-controls')) {
+                    toggleFullscreen();
+                }
+            }
+            lastTap = currentTime;
+        });
+
         // Initialize
         console.log('Türk Film & Dizi Modülü Yüklendi 🇹🇷');
-        console.log('Hem MP4 hem de iframe linkleri destekleniyor!');
+        console.log('Fullscreen desteği aktif!');
     </script>
 </body>
 </html>
